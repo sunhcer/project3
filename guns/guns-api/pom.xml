@@ -12,15 +12,17 @@
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
         </dependency>
+
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.20</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
     <packaging>jar</packaging>
-
     <name>guns-api</name>
     <description>guns api</description>
 
@@ -30,8 +32,6 @@
         <version>1.0.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-
-
 
     <build>
         <plugins>
