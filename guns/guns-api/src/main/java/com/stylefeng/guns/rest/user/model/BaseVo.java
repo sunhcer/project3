@@ -2,6 +2,8 @@ package com.stylefeng.guns.rest.user.model;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 类简介：
  * 当前方法：
@@ -10,7 +12,7 @@ import lombok.Data;
  * @author EGGE
  */
 @Data
-public class BaseVo {
+public class BaseVo implements Serializable {
    private Integer status;
    private Object data;
    private String msg;

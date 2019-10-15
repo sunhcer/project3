@@ -1,17 +1,20 @@
 package com.stylefeng.guns.rest.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.UserMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.common.persistence.model.User;
+import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
 import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description:
@@ -36,10 +39,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int userCheck(String username) {
-        int i=mtimeUserTMapper.selectByUserName(username);
-        if(i==0){//没有该用户名
+        int i = mtimeUserTMapper.selectByUserName(username);
+        if (i == 0) {//没有该用户名
             return 0;
-        }else {
+        } else {
             return 1;
         }
     }
@@ -48,8 +51,8 @@ public class UserServiceImpl implements UserService {
     public int userRegister(UserRegister userRegister) {
         //先判断该表中 有没有此username
         String username = userRegister.getUsername();
-        int i=mtimeUserTMapper.selectByUserName(username);
-        if(i==0){//没有该用户名
+        int i = mtimeUserTMapper.selectByUserName(username);
+        if (i == 0) {//没有该用户名
             MtimeUserT mtimeUserT = new MtimeUserT();
             mtimeUserT.setUserName(userRegister.getUsername());
             mtimeUserT.setAddress(userRegister.getAddress());
@@ -62,8 +65,26 @@ public class UserServiceImpl implements UserService {
 //            MtimeUserT build = MtimeUserT.builder().address("465").build();
             Integer insert = mtimeUserTMapper.insert(mtimeUserT);
             return 0;
-        }else {
+        } else {
             return 1;
         }
+    }
+
+    @Override
+    public Integer updateUserInfo(MtimeUserInfo userInfo) {
+        MtimeUserT user = mtimeUserTMapper.selectById(userInfo.getUuid());
+        if (user == null) return 0;
+        user.setAddress(userInfo.getAddress());
+        user.setUserSex(userInfo.getSex());
+        user.setBiography(userInfo.getBiography());
+        user.setBirthday(userInfo.getBirthday());
+        user.setEmail(userInfo.getEmail());
+        user.setHeadUrl(userInfo.getHeadAdress());
+        user.setLifeState(userInfo.getLifeState());
+        user.setNickName(userInfo.getNickname());
+        user.setUserName(userInfo.getUsername());
+        user.setUserPhone(userInfo.getPhone());
+        return mtimeUserTMapper.updateById(user);
+
     }
 }
