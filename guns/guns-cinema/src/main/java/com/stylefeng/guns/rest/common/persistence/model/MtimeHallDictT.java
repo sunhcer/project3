@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author ywx
- * @since 2019-10-14
+ * @since 2019-10-15
  */
 @TableName("mtime_hall_dict_t")
 public class MtimeHallDictT extends Model<MtimeHallDictT> {
