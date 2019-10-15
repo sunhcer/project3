@@ -4,6 +4,8 @@ import com.stylefeng.guns.rest.config.properties.RestProperties;
 import com.stylefeng.guns.rest.modular.auth.filter.AuthFilter;
 import com.stylefeng.guns.rest.modular.auth.security.DataSecurityAction;
 import com.stylefeng.guns.rest.modular.auth.security.impl.Base64SecurityAction;
+import com.stylefeng.guns.rest.modular.auth.validator.impl.MyValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

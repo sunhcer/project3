@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.user.service;
 
+import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
 import com.stylefeng.guns.rest.user.model.UserRegister;
 
 /**
@@ -15,4 +16,5 @@ public interface UserService {
 
     int userRegister(UserRegister userRegister);
 
+    Integer updateUserInfo(MtimeUserInfo userInfo);
 }

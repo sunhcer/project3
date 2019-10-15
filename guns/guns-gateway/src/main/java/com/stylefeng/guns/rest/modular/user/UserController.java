@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @Reference(interfaceClass = MtimeUserTService.class,check = false)
+    @Reference(interfaceClass = MtimeUserTService.class, check = false)
     MtimeUserTService mtimeUserTService;
 
-    @Reference(interfaceClass = UserService.class,check = false)
+    @Reference(interfaceClass = UserService.class, check = false)
     UserService userService;
 
     @RequestMapping("/user")
@@ -46,19 +46,19 @@ public class UserController {
     }*/
 
     @RequestMapping("/user/getUserInfo")
-    public BaseVo getUserInfoByToken(){
-       MtimeUserInfo userInfo = mtimeUserTService.selectUserForGatewayByUsername("admin");
-       return BaseVo.successVo(userInfo,null);
+    public BaseVo getUserInfoByToken() {
+        MtimeUserInfo userInfo = mtimeUserTService.selectUserForGatewayByUsername("admin");
+        return BaseVo.successVo(userInfo, null);
     }
 
     @RequestMapping("/user/check")
-    public BaseUserResponseVO userCheck(String username){
+    public BaseUserResponseVO userCheck(String username) {
         BaseUserResponseVO VO = new BaseUserResponseVO();
         int i = userService.userCheck(username);
-        if(i==0){//可以注册该用户名
+        if (i == 0) {//可以注册该用户名
             VO.setStatus(0);
             VO.setMsg("用户名不存在！");
-        }else if(i==1){
+        } else if (i == 1) {
             VO.setStatus(1);
             VO.setMsg("用户名已注册！");
         }
@@ -66,17 +66,24 @@ public class UserController {
     }
 
     @RequestMapping("/user/register")
-    public BaseUserResponseVO userRegister(UserRegister userRegister){
+    public BaseUserResponseVO userRegister(UserRegister userRegister) {
         BaseUserResponseVO VO = new BaseUserResponseVO();
         int i = userService.userRegister(userRegister);
-        if(i==0){//可以注册该用户名
+        if (i == 0) {//可以注册该用户名
             VO.setStatus(0);
             VO.setMsg("注册成功！");
-        }else if(i==1){
+        } else if (i == 1) {
             VO.setStatus(1);
             VO.setMsg("用户已经存在！");
         }
         return VO;
+    }
+
+    @RequestMapping("/user/updateUserInfo")
+    public BaseVo userUpdate(MtimeUserInfo userInfo) {
+        userService.updateUserInfo(userInfo);
+
+        return BaseVo.successVo(null,null);
     }
 
 

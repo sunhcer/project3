@@ -23,6 +23,16 @@ public class JwtProperties {
 
     private String authPath = "auth";
 
+    public String getIgnorePath() {
+        return ignorePath;
+    }
+
+    public void setIgnorePath(String ignorePath) {
+        this.ignorePath = ignorePath;
+    }
+
+    private String ignorePath="/user/register";
+
     private String md5Key = "randomKey";
 
     public static String getJwtPrefix() {

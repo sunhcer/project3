@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class FilmController {
-    @Reference(interfaceClass = FilmService.class)
+    @Reference(interfaceClass = FilmService.class,check = false)
     FilmService filmService;
     ///film/getIndex
     @GetMapping("/film/getIndex")

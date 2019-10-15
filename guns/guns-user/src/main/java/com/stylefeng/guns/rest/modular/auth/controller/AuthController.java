@@ -25,7 +25,7 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Resource(name = "simpleValidator")
+    @Resource(name = "myValidator")
     private IReqValidator reqValidator;
 
     @RequestMapping(value = "${jwt.auth-path}")

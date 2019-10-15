@@ -34,6 +34,20 @@
         <result column="begin_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
+    <update id="updateUserInfo">
+        update mtime_user_t
+        set user_name=#{user.username},
+            nick_name=#{user.nickname},
+            user_sex=#{user.sex},
+            birthday=#{user.birthday},
+            email=#{user.email},
+            user_phone=#{user.phone},
+            address=#{user.address},
+            head_url=#{user.headAdress},
+            biography=#{user.biography},
+            life_state=#{user.lifeState}
+        where uuid = #{user.UUID}
+    </update>
     <select id="selectUserByUserNameAndPassword" resultType="java.lang.Integer">
         select count(*)
         from mtime_user_t
@@ -43,14 +57,32 @@
     <sql id="BaseColumnExceptPassword">
         UUID,user_name,nick_name,user_sex,birthday,email,user_phone,address,head_url,biography,life_state,begin_time,update_time
     </sql>
+    <sql id="BaseColumn">
+        UUID,user_name,user_pwd,nick_name,user_sex,birthday,email,user_phone,address,head_url,biography,life_state,begin_time,update_time
+    </sql>
     <select id="selectUserInfoForGatewayByUsername" resultMap="UserInfoForGateway">
-        select <include refid="BaseColumnExceptPassword"/>
+        select
+        <include refid="BaseColumnExceptPassword"/>
         from mtime_user_t
         where user_name = #{userName}
     </select>
 
     <select id="selectByUserName" resultType="java.lang.Integer">
-        select count(*) from mtime_user_t where user_name = #{username}
+        select count(*)
+        from mtime_user_t
+        where user_name = #{username}
+    </select>
+    <select id="selectUserByUserName" resultMap="BaseResultMap">
+        select
+        <include refid="BaseColumn"/>
+        from mtime_user_t
+        where user_name = #{userName}
+    </select>
+    <select id="selectUserById" resultType="com.stylefeng.guns.rest.common.persistence.model.MtimeUserT">
+        select
+        <include refid="BaseColumn"/>
+        from mtime_user_t
+        where UUID = #{uuid}
     </select>
 
 </mapper>
