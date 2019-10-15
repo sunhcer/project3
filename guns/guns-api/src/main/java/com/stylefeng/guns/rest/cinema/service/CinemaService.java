@@ -17,13 +17,10 @@ public interface CinemaService {
     //接口1
     List<CinemaVo> getCinemas(CinemaQueryVo cinemaQueryVo);
 
+
     CinemaInfo getCinemaInfoByCinemaId(Integer cinemaId);
-
     List<Film> getFilmListByCinemaId(Integer cinemaId);
-
     List<FilmField> getFilmFieldsByCinemaIdAndFilmId(Integer cinemaId, Integer filmId);
-
     HallInfo getHallInfoByFieldId(Integer fieldId);
-
     Film getFilmInfoByFieldId(Integer fieldId);
 }
