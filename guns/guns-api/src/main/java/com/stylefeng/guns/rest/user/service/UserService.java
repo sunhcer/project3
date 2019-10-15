@@ -1,5 +1,6 @@
 package com.stylefeng.guns.rest.user.service;
 
+import com.stylefeng.guns.rest.auth.AuthRequest;
 import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
 import com.stylefeng.guns.rest.user.model.UserRegister;
 
@@ -17,4 +18,8 @@ public interface UserService {
     int userRegister(UserRegister userRegister);
 
     Integer updateUserInfo(MtimeUserInfo userInfo);
+
+    boolean login(AuthRequest authRequest);
+
+    int getUserId(String username);
 }

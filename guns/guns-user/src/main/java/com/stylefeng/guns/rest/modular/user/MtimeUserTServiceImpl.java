@@ -1,6 +1,6 @@
 package com.stylefeng.guns.rest.modular.user;
 
-import com.alibaba.dubbo.config.annotation.Reference;
+
 import com.alibaba.dubbo.config.annotation.Service;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.user.model.MtimeUserInfo;

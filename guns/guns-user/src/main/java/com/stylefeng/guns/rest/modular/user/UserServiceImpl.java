@@ -1,11 +1,14 @@
 package com.stylefeng.guns.rest.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.core.util.MD5Util;
+import com.stylefeng.guns.rest.auth.AuthRequest;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.UserMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.common.persistence.model.User;
+import com.stylefeng.guns.rest.modular.auth.validator.dto.Credence;
 import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
 import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.UserService;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Description:
@@ -83,6 +87,33 @@ public class UserServiceImpl implements UserService {
         user.setUserName(userInfo.getUsername());
         user.setUserPhone(userInfo.getPhone());
         return mtimeUserTMapper.updateById(user);
+    }
 
+    @Override
+    public boolean login(AuthRequest authRequest) {
+        String userName = authRequest.getCredenceName();
+        String password = authRequest.getCredenceCode();
+
+        String md5Password = MD5Util.encrypt(password);
+
+        EntityWrapper<MtimeUserT> wrapper = new EntityWrapper<>();
+        wrapper.eq("user_name", userName);
+        wrapper.eq("user_pwd", md5Password);
+
+        List<MtimeUserT> userTList = mtimeUserTMapper.selectList(wrapper);
+        if (userTList != null && userTList.size() > 0){
+            //登录成功
+            //将登录信息放入redis
+            return true;
+        }else {
+            //登录失败
+            return false;
+        }
+    }
+
+    @Override
+    public int getUserId(String username) {
+        MtimeUserT mtimeUserT = mtimeUserTMapper.selectUserByUserName(username);
+        return mtimeUserT.getUuid();
     }
 }
