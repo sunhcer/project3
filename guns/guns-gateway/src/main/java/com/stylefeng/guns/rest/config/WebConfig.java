@@ -27,4 +27,9 @@ public class WebConfig {
     public DataSecurityAction dataSecurityAction() {
         return new Base64SecurityAction();
     }
+
+    @Bean
+    public FastJsonHttpMessageConverterEx fastJsonHttpMessageConverterEx(){
+        return new FastJsonHttpMessageConverterEx();
+    }
 }
