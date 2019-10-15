@@ -18,5 +18,74 @@
         <result column="film_time" property="filmTime" />
         <result column="film_status" property="filmStatus" />
     </resultMap>
+<select id="queryFilmListByBoxNum" resultMap="queryFilmListByBoxNumMap">
+    select f.UUID,f.film_name,f.film_type,f.img_address,
+    f.film_score,f.film_preSaleNum,f.film_box_office,
+   f.film_cats,f.film_area,f.film_time,
+    fi.film_length from mtime_film_t f left join mtime_film_info_t fi
+    on f.UUID=fi.film_id
+    order by f.film_box_office
+</select>
+
+    <select id="queryFilmListByExceptNum" resultMap="queryFilmListByBoxNumMap">
+        select f.UUID,f.film_name,f.film_type,f.img_address,
+    f.film_score,f.film_preSaleNum,f.film_box_office,
+   f.film_cats,f.film_area,f.film_time,
+    fi.film_length from mtime_film_t f left join mtime_film_info_t fi
+    on f.UUID=fi.film_id
+    order by f.film_preSaleNum
+    </select>
+    <select id="queryFilmListByStatus" resultMap="queryFilmListByBoxNumMap">
+    select f.UUID,f.film_name,f.film_type,f.img_address,
+    f.film_score,f.film_preSaleNum,f.film_box_office,
+   f.film_cats,f.film_area,f.film_time,
+    fi.film_length from mtime_film_t f left join mtime_film_info_t fi
+    on f.UUID=fi.film_id
+    and f.film_status=#{status}
+    </select>
+
+    <select id="queryFilmListByScore" resultMap="queryFilmListByBoxNumMap">
+   select f.UUID,f.film_name,f.film_type,f.img_address,
+    f.film_score,f.film_preSaleNum,f.film_box_office,
+   f.film_cats,f.film_area,f.film_time,
+    fi.film_length from mtime_film_t f left join mtime_film_info_t fi
+    on f.UUID=fi.film_id
+    order by f.film_score
+    </select>
+
+    <select id="queryFilmListByReceiveVo" resultMap="queryFilmListByBoxNumMap">
+        select f.UUID,f.film_name,f.film_type,f.img_address,
+    f.film_score,f.film_preSaleNum,f.film_box_office,
+   f.film_cats,f.film_area,f.film_time,
+    fi.film_length from mtime_film_t f
+    left join mtime_film_info_t fi on f.UUID=fi.film_id
+   <where>
+   <if test="!catId.equals('#99#')">
+    f.film_cats like #{catId}
+   </if>
+    <if test="receiveVo.sourceId != 99">
+        and f.film_source=#{receiveVo.sourceId}
+    </if>
+    <if test="receiveVo.yearId != 99">
+        and f.film_date=#{receiveVo.yearId}
+    </if>
+   </where>
+   limit #{receiveVo.pageSize} offset #{receiveVo.offset}
+    </select>
+
+
+    <resultMap id="queryFilmListByBoxNumMap" type="com.stylefeng.guns.rest.common.persistence.model.SBoxRankingRef">
+        <result column="UUID" property="filmId"/>
+        <result column="film_box_office" property="boxNum"/>
+        <result column="film_preSaleNum" property="expectNum"/>
+        <result column="film_cats" property="filmCats"/>
+        <result column="film_length" property="filmLength"/>
+        <result column="film_name" property="filmName"/>
+        <result column="film_score" property="filmScore"/>
+        <result column="film_type" property="filmType"/>
+        <result column="img_address" property="imgAddress"/>
+        <result column="film_score" property="score"/>
+        <result column="film_time" property="showTime"/>
+    </resultMap>
 
 </mapper>

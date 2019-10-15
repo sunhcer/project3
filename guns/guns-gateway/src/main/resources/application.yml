@@ -1,6 +1,6 @@
 rest:
-  auth-open: false #jwt鉴权机制是否开启(true或者false)
-  sign-open: false #签名机制是否开启(true或false)
+  auth-open: true #jwt鉴权机制是否开启(true或者false)
+  sign-open: true #签名机制是否开启(true或false)
 
 jwt:
   header: Authorization   #http请求头所需要的字段
@@ -36,6 +36,9 @@ spring:
     name: guns-gateway
   dubbo:
     registry: zookeeper://localhost:2181
+
+imgPre:
+  path: http://img.meetingshop.cn/
 
 logging:
   level.root: info

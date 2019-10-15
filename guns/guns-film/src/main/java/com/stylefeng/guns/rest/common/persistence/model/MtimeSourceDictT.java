@@ -13,6 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author zhou
+ * @author sxg
  * @since 2019-10-15
  */
 @TableName("mtime_source_dict_t")
