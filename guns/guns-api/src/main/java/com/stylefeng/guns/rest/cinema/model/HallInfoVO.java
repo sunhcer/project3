@@ -3,14 +3,14 @@ package com.stylefeng.guns.rest.cinema.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
-public class FieldsVO {
+public class HallInfoVO {
 
     private CinemaInfo cinemaInfo;
 
-    private List<Film> filmList;
+    private Film filmInfo;
+
+    private HallInfo hallInfo;
 
 }

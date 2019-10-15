@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author ywx
- * @since 2019-10-14
+ * @since 2019-10-15
  */
 public interface MtimeHallDictTMapper extends BaseMapper<MtimeHallDictT> {
 
