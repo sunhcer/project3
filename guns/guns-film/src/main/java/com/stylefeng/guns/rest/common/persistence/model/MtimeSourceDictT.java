@@ -9,14 +9,14 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 地域信息表
+ * 区域信息表
  * </p>
  *
- * @author ywx
+ * @author sxg
  * @since 2019-10-15
  */
-@TableName("mtime_hall_dict_t")
-public class MtimeHallDictT extends Model<MtimeHallDictT> {
+@TableName("mtime_source_dict_t")
+public class MtimeSourceDictT extends Model<MtimeSourceDictT> {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,11 +30,6 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
      */
     @TableField("show_name")
     private String showName;
-    /**
-     * 座位文件存放地址
-     */
-    @TableField("seat_address")
-    private String seatAddress;
 
 
     public Integer getUuid() {
@@ -53,14 +48,6 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
         this.showName = showName;
     }
 
-    public String getSeatAddress() {
-        return seatAddress;
-    }
-
-    public void setSeatAddress(String seatAddress) {
-        this.seatAddress = seatAddress;
-    }
-
     @Override
     protected Serializable pkVal() {
         return this.uuid;
@@ -68,10 +55,9 @@ public class MtimeHallDictT extends Model<MtimeHallDictT> {
 
     @Override
     public String toString() {
-        return "MtimeHallDictT{" +
+        return "MtimeSourceDictT{" +
         "uuid=" + uuid +
         ", showName=" + showName +
-        ", seatAddress=" + seatAddress +
         "}";
     }
 }

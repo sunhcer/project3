@@ -12,7 +12,7 @@ import java.io.Serializable;
  * banner信息表
  * </p>
  *
- * @author zhou
+ * @author sxg
  * @since 2019-10-14
  */
 @TableName("mtime_banner_t")

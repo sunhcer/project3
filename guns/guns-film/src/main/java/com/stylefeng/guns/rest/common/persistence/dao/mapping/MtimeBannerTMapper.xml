@@ -10,4 +10,13 @@
         <result column="is_valid" property="isValid" />
     </resultMap>
 
+
+    <select id="queryAllBanners" resultMap="queryAllBannersMap">
+        select UUID,banner_address,banner_url from mtime_banner_t
+    </select>
+    <resultMap id="queryAllBannersMap" type="com.stylefeng.guns.rest.common.persistence.model.SBannersRef">
+        <result column="UUID" property="bannerId" />
+        <result column="banner_address" property="bannerAddress"/>
+        <result column="banner_url" property="bannerUrl"/>
+    </resultMap>
 </mapper>
