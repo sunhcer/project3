@@ -34,11 +34,15 @@ public class CinemaServiceImpl implements CinemaService {
     @Override
     public CinemaInfo getCinemaInfoByCinemaId(Integer cinemaId) {
         MtimeCinemaT mtimeCinemaT = mtimeCinemaTMapper.selectById(cinemaId);
-        CinemaInfo cinemaInfo = new CinemaInfo(mtimeCinemaT.getCinemaAddress(),
-                mtimeCinemaT.getUuid(),
-                mtimeCinemaT.getCinemaName(),
-                mtimeCinemaT.getCinemaPhone(),
-                mtimeCinemaT.getImgAddress());
+
+        CinemaInfo cinemaInfo = CinemaInfo.builder()
+                .cinemaAdress(mtimeCinemaT.getCinemaAddress())
+                .cinemaId(mtimeCinemaT.getUuid())
+                .cinemaName(mtimeCinemaT.getCinemaName())
+                .cinemaPhone(mtimeCinemaT.getCinemaPhone())
+                .imgUrl(mtimeCinemaT.getImgAddress())
+                .build();
+
         return cinemaInfo;
     }
 

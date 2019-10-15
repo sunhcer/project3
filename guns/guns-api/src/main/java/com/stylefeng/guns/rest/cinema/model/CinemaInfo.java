@@ -1,7 +1,12 @@
 package com.stylefeng.guns.rest.cinema.model;
 
+import lombok.Builder;
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
+@Builder
 public class CinemaInfo implements Serializable {
 
     private String cinemaAdress;
@@ -14,7 +19,7 @@ public class CinemaInfo implements Serializable {
 
     private String imgUrl;
 
-    public CinemaInfo(String cinemaAdress, Integer cinemaId, String cinemaName, String cinemaPhone, String imgUrl) {
+   /* public CinemaInfo(String cinemaAdress, Integer cinemaId, String cinemaName, String cinemaPhone, String imgUrl) {
         this.cinemaAdress = cinemaAdress;
         this.cinemaId = cinemaId;
         this.cinemaName = cinemaName;
@@ -63,5 +68,5 @@ public class CinemaInfo implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
-    }
+    }*/
 }
