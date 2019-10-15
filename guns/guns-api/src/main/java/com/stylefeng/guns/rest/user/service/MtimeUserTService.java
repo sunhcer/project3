@@ -13,4 +13,7 @@ public interface MtimeUserTService {
     Integer loginByUserNameAndPassword(String userName, String password);
 
     MtimeUserInfo selectUserForGatewayByUsername(String username);
+
+    MtimeUserInfo selectUserInfoById(String userId);
+
 }
