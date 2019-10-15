@@ -46,3 +46,6 @@ logging:
   level.com.stylefeng: debug
   path: logs/
   file: guns-film.log
+myimg:
+  prefix: http://img.meetingshop.cn/
+  banner-url: www.meetingshop.cn

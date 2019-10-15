@@ -1,5 +1,7 @@
 package com.stylefeng.guns.rest.film.service;
 
+import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
+
 /**
  * @Description:
  * @Author: zhou
@@ -7,4 +9,6 @@ package com.stylefeng.guns.rest.film.service;
  * @Time 17:13
  */
 public interface FilmService {
+    //film/getIndex
+    public BaseFilmResponseVO getFilmIndex();
 }

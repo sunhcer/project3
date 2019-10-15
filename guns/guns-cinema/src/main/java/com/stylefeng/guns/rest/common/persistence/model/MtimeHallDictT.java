@@ -11,7 +11,6 @@ import java.io.Serializable;
  * <p>
  * 地域信息表
  * </p>
- *
  * @author stylefeng
  * @since 2019-10-14
  */

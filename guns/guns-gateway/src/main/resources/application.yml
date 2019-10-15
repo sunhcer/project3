@@ -37,6 +37,9 @@ spring:
   dubbo:
     registry: zookeeper://localhost:2181
 
+imgPre:
+  path: http://img.meetingshop.cn/
+
 logging:
   level.root: info
   level.com.stylefeng: debug

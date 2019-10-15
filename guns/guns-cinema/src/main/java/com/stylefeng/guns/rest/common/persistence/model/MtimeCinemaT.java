@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 影院信息表
  * </p>
  *
- * @author stylefeng
+ * @author ywx
  * @since 2019-10-14
  */
 @TableName("mtime_cinema_t")

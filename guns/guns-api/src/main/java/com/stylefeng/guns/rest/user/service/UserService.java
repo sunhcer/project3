@@ -1,5 +1,7 @@
 package com.stylefeng.guns.rest.user.service;
 
+import com.stylefeng.guns.rest.user.model.UserRegister;
+
 /**
  * @Description:
  * @Author: zhou
@@ -8,4 +10,9 @@ package com.stylefeng.guns.rest.user.service;
  */
 public interface UserService {
     String selectUserNameById(Integer id);
+
+    int userCheck(String username);
+
+    int userRegister(UserRegister userRegister);
+
 }

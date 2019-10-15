@@ -13,4 +13,11 @@
 
     </select>
 
+   <!-- <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
+        <id column="UUID" property="uuid" />
+        <result column="show_name" property="showName" />
+        <result column="seat_address" property="seatAddress" />
+    </resultMap>
+-->
+
 </mapper>

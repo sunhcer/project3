@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import com.stylefeng.guns.rest.common.persistence.model.MtimeCinemaT;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**
  * <p>
@@ -18,4 +20,5 @@ import java.util.List;
  */
 public interface MtimeCinemaTMapper extends BaseMapper<MtimeCinemaT> {
    List<CinemaVo>  getCinemas();
+
 }
