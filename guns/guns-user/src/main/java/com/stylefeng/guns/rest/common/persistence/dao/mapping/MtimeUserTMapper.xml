@@ -49,4 +49,8 @@
         where user_name = #{userName}
     </select>
 
+    <select id="selectByUserName" resultType="java.lang.Integer">
+        select count(*) from mtime_user_t where user_name = #{username}
+    </select>
+
 </mapper>

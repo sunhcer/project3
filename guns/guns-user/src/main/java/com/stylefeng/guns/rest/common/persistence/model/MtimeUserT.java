@@ -6,6 +6,10 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
@@ -17,6 +21,9 @@ import java.io.Serializable;
  * @since 2019-10-14
  */
 @TableName("mtime_user_t")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MtimeUserT extends Model<MtimeUserT> {
 
     private static final long serialVersionUID = 1L;
