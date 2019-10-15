@@ -81,9 +81,10 @@ public class UserController {
 
     @RequestMapping("/user/updateUserInfo")
     public BaseVo userUpdate(MtimeUserInfo userInfo) {
-        userService.updateUserInfo(userInfo);
-
-        return BaseVo.successVo(null,null);
+        Integer result = userService.updateUserInfo(userInfo);
+        if(result !=null&&result>0)
+        return BaseVo.successVo(userInfo,null);
+        return BaseVo.errorVo(1,"修改用戶信息失敗");
     }
 
 
