@@ -3,10 +3,21 @@
 <mapper namespace="com.stylefeng.guns.rest.common.persistence.dao.MtimeHallDictTMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
+    <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.cinema.model.HallTypeVo">
+        <id column="UUID" property="halltypeId" />
+        <result column="show_name" property="halltypeName" />
+
+    </resultMap>
+    <select id="getHallType" resultMap="BaseResultMap">
+     select UUID,show_name from  mtime_hall_dict_t
+
+    </select>
+
+   <!-- <resultMap id="BaseResultMap" type="com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT">
         <id column="UUID" property="uuid" />
         <result column="show_name" property="showName" />
         <result column="seat_address" property="seatAddress" />
     </resultMap>
+-->
 
 </mapper>
