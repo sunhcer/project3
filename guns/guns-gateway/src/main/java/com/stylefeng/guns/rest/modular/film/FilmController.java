@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
 import com.stylefeng.guns.rest.film.service.FilmService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import com.stylefeng.guns.rest.film.service.SFilmService;
 import com.stylefeng.guns.rest.film.vo.SFilmIndexPage;
@@ -25,9 +26,22 @@ public class FilmController {
         return filmIndex;
     }
 
+    ///film/films/{影片编号或影片名称}
+    @GetMapping(value = "/film/films/{info}")
+    public BaseFilmResponseVO<Object> getFilmInfo(Integer searchType, @PathVariable("info")String info) {
+        BaseFilmResponseVO<Object> responseVO = new BaseFilmResponseVO<>();
+        if (searchType == 0) {
+            //按照编号找
+            responseVO = filmService.searchFilmById(info);
+        } else {
+            //按照名称找
+            responseVO = filmService.searchFilmById(info);
+        }
+        return responseVO;
+    }
     //影片首页测试
     @RequestMapping("sxg/film/getIndex")
-    public SFilmIndexPage filmGetIndex() {
+    public SFilmIndexPage filmGetIndex(){
         SFilmIndexPage filmBaseVo = sfilmService.queryFilmIndex();
         return filmBaseVo;
     }

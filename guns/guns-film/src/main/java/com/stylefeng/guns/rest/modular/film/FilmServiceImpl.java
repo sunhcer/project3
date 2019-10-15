@@ -2,25 +2,15 @@ package com.stylefeng.guns.rest.modular.film;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeBannerTMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmInfoTMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeFilmTMapper;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeBannerT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmInfoT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeFilmT;
-import com.stylefeng.guns.rest.film.model.Banner;
-import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
-import com.stylefeng.guns.rest.film.model.FilmDetail;
-import com.stylefeng.guns.rest.film.model.FilmsDetail;
+import com.stylefeng.guns.rest.common.persistence.dao.*;
+import com.stylefeng.guns.rest.common.persistence.model.*;
+import com.stylefeng.guns.rest.film.model.*;
 import com.stylefeng.guns.rest.film.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description:
@@ -41,6 +31,14 @@ public class FilmServiceImpl implements FilmService {
 
     @Autowired
     MtimeFilmInfoTMapper filmInfoTMapper;
+    @Autowired
+    MtimeCatDictTMapper mtimeCatDictTMapper;
+    @Autowired
+    MtimeSourceDictTMapper mtimeSourceDictTMapper;
+    @Autowired
+    MtimeFilmActorTMapper mtimeFilmActorTMapper;
+    @Autowired
+    MtimeActorTMapper mtimeActorTMapper;
 
     @Override
     public BaseFilmResponseVO getFilmIndex() {
@@ -96,10 +94,121 @@ public class FilmServiceImpl implements FilmService {
         map.put("exceptRanking", exceptRanking);
         map.put("soonFilms", soonFilms);
 
-
-
         filmResponseVO.setData(map);
         return filmResponseVO;
+    }
+
+    @Override
+    public BaseFilmResponseVO searchFilmById(String info) {
+        BaseFilmResponseVO responseVO = new BaseFilmResponseVO<>();
+
+        MtimeFilmT mtimeFilmT = mtimeFilmTMapper.selectById(info);
+        MtimeFilmInfoT mtimeFilmInfoT = filmInfoTMapper.selectById(mtimeFilmT.getUuid());
+        String filmCats = mtimeFilmT.getFilmCats();
+        List<String> catList = operatorCats(filmCats);
+        String carts = getCatsByList(catList);
+
+        //获取地区
+        String areaName = mtimeSourceDictTMapper.selectById(mtimeFilmT.getFilmArea()).getShowName();
+        String info2 = areaName + " / " + mtimeFilmInfoT.getFilmLength();
+
+        //info3的拼接
+        String info3 = mtimeFilmT.getFilmTime() + areaName + "上映";
+
+
+
+        //查询导演和演员信息
+        //导演
+        MtimeActorT actorFromDb = mtimeActorTMapper.selectById(mtimeFilmInfoT.getDirectorId());
+
+        //封装导演信息
+        ActorBean actor = ActorBean.builder().imgAddress(actorFromDb.getActorImg())
+                .directorName(actorFromDb.getActorName()).build();
+
+        //查询该片的所有演员信息
+        //首先查出所有的List  演员表
+        EntityWrapper<MtimeFilmActorT> wrapper = new EntityWrapper<>();
+        wrapper.eq("film_id", mtimeFilmT.getUuid());
+        List<MtimeFilmActorT> graphActor = mtimeFilmActorTMapper.selectList(wrapper);
+        ArrayList<ActorBean> actorBeans = new ArrayList<>();
+
+        //演员表  查出信息 进行封装
+        for (MtimeFilmActorT mtimeFilmActorT : graphActor) {
+            MtimeActorT mtimeActorT = mtimeActorTMapper.selectById(mtimeFilmActorT.getActorId());
+            ActorBean actorBean = ActorBean.builder().directorName(mtimeActorT.getActorName())
+                    .imgAddress(mtimeActorT.getActorImg())
+                    .roleName(mtimeFilmActorT.getRoleName()).build();
+            actorBeans.add(actorBean);
+        }
+
+        ActorsBean actorsBean = new ActorsBean();
+        actorsBean.setActors(actorBeans);
+        actorsBean.setDirector(actor);
+
+        String filmImgs = mtimeFilmInfoT.getFilmImgs();
+        ImgsBean imgsBean = operatorImgs(filmImgs);
+
+        //info4的拼接
+        FilmInfo info4 = FilmInfo.builder().biopgraphy(mtimeFilmInfoT.getBiography())
+                .filmId(mtimeFilmT.getUuid().toString())
+                .actors(actorsBean)
+                .imgVO(imgsBean)
+                .build();
+
+        // `film_cats` varchar(50) DEFAULT NULL COMMENT '影片分类，参照分类表,多个分类以#分割',
+        SearchFilmByIdBean searchFilmByIdBean = SearchFilmByIdBean.builder()
+                .filmId(mtimeFilmT.getUuid().toString())
+                .filmName(mtimeFilmT.getFilmName())
+                .imgAddress(mtimeFilmT.getImgAddress())
+                .score(mtimeFilmT.getFilmScore())
+                .scoreNum(mtimeFilmInfoT.getFilmScoreNum().toString())
+                .totalBox(mtimeFilmT.getFilmBoxOffice().toString())
+                .info01(carts)
+                .info02(info2)
+                .info03(info3)
+                .info04(info4).build();
+
+        responseVO.setData(searchFilmByIdBean);
+
+        return responseVO;
+    }
+
+    private ImgsBean operatorImgs(String filmImgs) {
+        String[] strings = filmImgs.split(",");
+        ImgsBean imgsBean = new ImgsBean();
+
+        imgsBean.setMainImg(strings[0]);
+        imgsBean.setImg01(strings[1]);
+        imgsBean.setImg02(strings[2]);
+        imgsBean.setImg03(strings[3]);
+        imgsBean.setImg04(strings[4]);
+        return imgsBean;
+    }
+
+    private List<String> operatorCats(String filmCats) {
+        ArrayList<String> list = new ArrayList<>();
+
+        if (filmCats == null || filmCats.length() == 0) {
+            return list;
+        }
+        String substring = filmCats.substring(1, filmCats.length() - 1);
+
+        String[] split = substring.split("#");
+
+        return Arrays.asList(split);
+    }
+
+    private String getCatsByList(List<String> catList) {
+        StringBuilder sb = new StringBuilder();
+        List<MtimeCatDictT> dictTList = mtimeCatDictTMapper.selectBatchIds(catList);
+
+        for (int i = 0; i < dictTList.size(); i++) {
+            sb.append(dictTList.get(i));
+            if (i != dictTList.size() - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
     }
 
     private FilmsDetail getMtimeFileByWrapper(EntityWrapper wrapper) {
