@@ -18,8 +18,8 @@ import java.io.Serializable;
 @TableName("mtime_brand_dict_t")
 public class MtimeBrandDictT extends Model<MtimeBrandDictT> {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -4193773846375467659L;
     /**
      * 主键编号
      */

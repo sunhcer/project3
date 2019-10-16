@@ -18,8 +18,7 @@ import java.io.Serializable;
 @TableName("mtime_area_dict_t")
 public class MtimeAreaDictT extends Model<MtimeAreaDictT> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = 1006965529273306148L;
     /**
      * 主键编号
      */
