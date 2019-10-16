@@ -28,6 +28,7 @@
     </dependencies>
     <packaging>jar</packaging>
     <name>guns-api</name>
+
     <description>guns api</description>
 
     <parent>
