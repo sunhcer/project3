@@ -69,6 +69,7 @@ public class FilmController {
         SFilmIndexPage page = sfilmService.queryfilmGetConditionList(receiveVo);
         return page;
     }
+
 }
 
 

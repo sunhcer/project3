@@ -1,5 +1,5 @@
 rest:
-  auth-open: true #jwt鉴权机制是否开启(true或者false)
+  auth-open: false #jwt鉴权机制是否开启(true或者false)
   sign-open: false #签名机制是否开启(true或false)
 
 jwt:
@@ -37,6 +37,8 @@ spring:
     name: guns-gateway
   dubbo:
     registry: zookeeper://localhost:2181
+  resources:
+    static-locations: file:D:\QRcode\
 
 imgPre:
   path: http://img.meetingshop.cn/
