@@ -18,8 +18,8 @@ import java.io.Serializable;
 @TableName("mtime_cinema_t")
 public class MtimeCinemaT extends Model<MtimeCinemaT> {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -7925045306843098267L;
     /**
      * 主键编号
      */

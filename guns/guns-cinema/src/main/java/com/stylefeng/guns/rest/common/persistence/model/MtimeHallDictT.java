@@ -17,8 +17,8 @@ import java.io.Serializable;
 @TableName("mtime_hall_dict_t")
 public class MtimeHallDictT extends Model<MtimeHallDictT> {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -814467354654910369L;
     /**
      * 主键编号
      */
