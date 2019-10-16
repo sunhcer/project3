@@ -211,6 +211,17 @@ public class FilmServiceImpl implements FilmService {
         return sb.toString();
     }
 
+    @Override
+    public BaseFilmResponseVO<Object> searchFilmsByName(String info) {
+
+        BaseFilmResponseVO<Object> responseVO = new BaseFilmResponseVO<>();
+
+
+
+        return responseVO;
+
+    }
+
     private FilmsDetail getMtimeFileByWrapper(EntityWrapper wrapper) {
 
 

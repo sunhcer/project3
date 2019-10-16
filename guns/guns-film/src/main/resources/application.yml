@@ -33,7 +33,7 @@ spring:
       password: 123456
       filters: log4j,wall,mergeStat
   application:
-    name: guns-cinema
+    name: guns-film
   dubbo:
     protocol:
       name: dubbo

@@ -13,4 +13,6 @@ public interface FilmService {
     public BaseFilmResponseVO getFilmIndex();
 
     public BaseFilmResponseVO<Object> searchFilmById(String info);
+
+    public BaseFilmResponseVO<Object> searchFilmsByName(String info);
 }
