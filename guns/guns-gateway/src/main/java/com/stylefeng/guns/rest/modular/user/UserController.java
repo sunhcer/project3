@@ -2,10 +2,9 @@ package com.stylefeng.guns.rest.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
-import com.stylefeng.guns.rest.user.model.BaseUserResponseVO;
-import com.stylefeng.guns.rest.user.model.BaseVo;
-import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
-import com.stylefeng.guns.rest.user.model.UserRegister;
+import com.stylefeng.guns.rest.modular.auth.util.JedisUtil;
+import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.rest.user.model.*;
 import com.stylefeng.guns.rest.user.service.MtimeUserTService;
 import com.stylefeng.guns.rest.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,9 @@ public class UserController {
     @Autowired
     Jedis jedis;
 
+    @Autowired
+    JedisUtil jedisUtil;
+
     @RequestMapping("/user")
     public String queryUserById(Integer id) {
         String username = userService.selectUserNameById(id);
@@ -58,8 +60,10 @@ public class UserController {
     }*/
 
     @RequestMapping("/user/getUserInfo")
-    public BaseVo getUserInfoByToken() {
-        MtimeUserInfo userInfo = mtimeUserTService.selectUserForGatewayByUsername("admin");
+    public BaseVo getUserInfoByToken(HttpServletRequest request) {
+//        jwtProperties.
+        String userId = jedisUtil.getUserId(request);
+        MtimeUserInfo userInfo= mtimeUserTService.selectUserInfoById(userId);
         return BaseVo.successVo(userInfo, null);
     }
 

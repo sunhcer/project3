@@ -44,8 +44,8 @@ public class CinemaController {
 
         BaseRespVo success = BaseRespVo.success(cinemas);
         success.setImgPre(imgPre);
-        success.setTotalPage(1);
-        success.setNowPage(1);
+        success.setTotalPage(cinemaQueryVo.getTotalPage());
+        success.setNowPage(cinemaQueryVo.getNowPage());
         return success;
     }
 
