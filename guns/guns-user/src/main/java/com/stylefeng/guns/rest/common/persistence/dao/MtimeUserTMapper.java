@@ -22,4 +22,9 @@ public interface MtimeUserTMapper extends BaseMapper<MtimeUserT> {
     int selectByUserName(@Param("username")String username);
 
 
+    MtimeUserT selectUserByUserName(String userName);
+
+    Integer updateUserInfo(MtimeUserT user);
+
+    MtimeUserT selectUserById(Integer uuid);
 }

@@ -11,4 +11,8 @@ import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
 public interface FilmService {
     //film/getIndex
     public BaseFilmResponseVO getFilmIndex();
+
+    public BaseFilmResponseVO<Object> searchFilmById(String info);
+
+    public BaseFilmResponseVO<Object> searchFilmsByName(String info);
 }

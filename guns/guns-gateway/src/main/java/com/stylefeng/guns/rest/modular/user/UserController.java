@@ -1,14 +1,18 @@
 package com.stylefeng.guns.rest.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.stylefeng.guns.rest.user.model.BaseVo;
-import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
+import com.stylefeng.guns.rest.config.properties.JwtProperties;
+import com.stylefeng.guns.rest.modular.auth.util.JedisUtil;
+import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
+import com.stylefeng.guns.rest.user.model.*;
 import com.stylefeng.guns.rest.user.service.MtimeUserTService;
-import com.stylefeng.guns.rest.user.model.BaseUserResponseVO;
-import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import redis.clients.jedis.Jedis;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Description:
@@ -19,11 +23,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
-    @Reference(interfaceClass = MtimeUserTService.class,check = false)
+
+    @Reference(interfaceClass = MtimeUserTService.class, check = false)
     MtimeUserTService mtimeUserTService;
 
-    @Reference(interfaceClass = UserService.class,check = false)
+    @Reference(interfaceClass = UserService.class, check = false)
     UserService userService;
+
+    @Autowired
+    JwtProperties jwtProperties;
+
+    @Autowired
+    Jedis jedis;
+
+    @Autowired
+    JedisUtil jedisUtil;
 
     @RequestMapping("/user")
     public String queryUserById(Integer id) {
@@ -46,19 +60,21 @@ public class UserController {
     }*/
 
     @RequestMapping("/user/getUserInfo")
-    public BaseVo getUserInfoByToken(){
-       MtimeUserInfo userInfo = mtimeUserTService.selectUserForGatewayByUsername("admin");
-       return BaseVo.successVo(userInfo,null);
+    public BaseVo getUserInfoByToken(HttpServletRequest request) {
+//        jwtProperties.
+        String userId = jedisUtil.getUserId(request);
+        MtimeUserInfo userInfo= mtimeUserTService.selectUserInfoById(userId);
+        return BaseVo.successVo(userInfo, null);
     }
 
     @RequestMapping("/user/check")
-    public BaseUserResponseVO userCheck(String username){
+    public BaseUserResponseVO userCheck(String username) {
         BaseUserResponseVO VO = new BaseUserResponseVO();
         int i = userService.userCheck(username);
-        if(i==0){//可以注册该用户名
+        if (i == 0) {//可以注册该用户名
             VO.setStatus(0);
             VO.setMsg("用户名不存在！");
-        }else if(i==1){
+        } else if (i == 1) {
             VO.setStatus(1);
             VO.setMsg("用户名已注册！");
         }
@@ -66,18 +82,51 @@ public class UserController {
     }
 
     @RequestMapping("/user/register")
-    public BaseUserResponseVO userRegister(UserRegister userRegister){
+    public BaseUserResponseVO userRegister(UserRegister userRegister) {
         BaseUserResponseVO VO = new BaseUserResponseVO();
         int i = userService.userRegister(userRegister);
-        if(i==0){//可以注册该用户名
+        if (i == 0) {//可以注册该用户名
             VO.setStatus(0);
             VO.setMsg("注册成功！");
-        }else if(i==1){
+        } else if (i == 1) {
             VO.setStatus(1);
             VO.setMsg("用户已经存在！");
         }
         return VO;
     }
 
+    @RequestMapping("/user/updateUserInfo")
+    public BaseVo userUpdate(MtimeUserInfo userInfo) {
+        Integer result = userService.updateUserInfo(userInfo);
+        if(result !=null&&result>0)
+        return BaseVo.successVo(userInfo,null);
+        return BaseVo.errorVo(1,"修改用户信息失败");
+    }
+
+    ///user/logout
+    @RequestMapping("/user/logout")
+    public BaseVo logout(HttpServletRequest request){
+        final String requestHeader = request.getHeader(jwtProperties.getHeader());
+        String authToken = null;
+        if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
+            authToken = requestHeader.substring(7);
+            String flag = jedis.get(authToken);
+            BaseVo baseVo = new BaseVo();
+            if (flag == null) {
+                baseVo.setStatus(1);
+                baseVo.setMsg("退出失败，用户尚未登陆");
+                return baseVo;
+            }
+            jedis.expire(authToken, 0);      //清除token
+            baseVo.setStatus(0);
+            baseVo.setMsg("退出成功");
+            return baseVo;
+        }else{
+            BaseVo baseVo = new BaseVo();
+            baseVo.setStatus(1);
+            baseVo.setMsg("退出失败，用户尚未登陆");
+            return baseVo;
+        }
+    }
 
 }

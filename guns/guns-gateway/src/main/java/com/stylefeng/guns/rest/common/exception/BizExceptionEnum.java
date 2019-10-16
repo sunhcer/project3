@@ -21,6 +21,17 @@ public enum BizExceptionEnum implements ServiceExceptionEnum {
      */
     SIGN_ERROR(700, "签名验证失败"),
 
+
+    /**
+     * 影片异常
+     */
+    FILM_EMPTY_EXCEPTION(1, "查询失败，无影片可加载"),
+
+    /**
+     * 系统出现异常
+     */
+    SYSTEM_EXCEPTION(999,"系统出现异常,请联系管理员"),
+
     /**
      * 其他
      */

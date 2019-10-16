@@ -12,6 +12,7 @@ import java.io.Serializable;
  * 区域信息表
  * </p>
  *
+ * @author zhou
  * @author sxg
  * @since 2019-10-15
  */

@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 类型信息表
  * </p>
  *
- * @author sxg
+ * @author zhou
  * @since 2019-10-15
  */
 @TableName("mtime_cat_dict_t")

@@ -2,22 +2,19 @@ package com.stylefeng.guns.rest.modular.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.stylefeng.guns.rest.cinema.model.CinemaInfo;
-import com.stylefeng.guns.rest.cinema.model.Film;
-import com.stylefeng.guns.rest.cinema.model.FilmField;
-import com.stylefeng.guns.rest.cinema.model.HallInfo;
+import com.stylefeng.guns.rest.cinema.model.*;
 import com.stylefeng.guns.rest.cinema.service.CinemaService;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeCinemaTMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeFieldTMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeHallDictTMapper;
-import com.stylefeng.guns.rest.common.persistence.dao.MtimeHallFilmInfoTMapper;
+import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeCinemaT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeFieldT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeHallFilmInfoT;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +30,80 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Autowired
     MtimeHallFilmInfoTMapper mtimeHallFilmInfoTMapper;
-
     @Autowired
-    MtimeHallDictTMapper mtimeHallDictTMapper;
+    private MtimeBrandDictTMapper mtimeBrandDictTMapper;
+    @Autowired
+    private MtimeAreaDictTMapper mtimeAreaDictTMapper;
+    @Autowired
+    private MtimeHallDictTMapper mtimeHallDictTMapper;
+
+    @Override
+    public List<BrandVo> queryBrands(Integer brandId) {
+        List<BrandVo> brandVos = mtimeBrandDictTMapper.getBrands();
+        return brandVos;
+    }
+    @Override
+    public List<AreaVo> queryAreas(Integer areaId) {
+        List<AreaVo> area = mtimeAreaDictTMapper.getArea();
+        return area;
+    }
+    @Override
+    public List<HallTypeVo> queryHallTypes(Integer hallType) {
+        List<HallTypeVo> hallType1 = mtimeHallDictTMapper.getHallType();
+        return hallType1;
+    }
+
+    @Override
+    public List<CinemaVo> getCinemas(CinemaQueryVo cinemaQueryVo) {
+//        List<CinemaVo> cinemas = mtimeCinemaTMapper.getCinemas();
+        List<CinemaVo> cinemas = new ArrayList<>();
+        ///cinema/getCinemas?brandId=99&areaId=7&halltypeId=1&pageSize=12&nowPage=1
+        Integer nowPage = cinemaQueryVo.getNowPage();
+        Integer pageSize = cinemaQueryVo.getPageSize();
+        //偏移量
+        int offset = (nowPage - 1) * pageSize;
+        //
+        RowBounds rowBounds = new RowBounds(offset, pageSize);
+        //条件生成  判断
+        EntityWrapper<MtimeCinemaT> wrapper = new EntityWrapper<>();
+        //
+        Integer brandId = cinemaQueryVo.getBrandId();
+        Integer areaId = cinemaQueryVo.getAreaId();
+        Integer hallType = cinemaQueryVo.getHallType();
+
+        if (brandId != 99){
+            wrapper.eq("brand_id", brandId);
+        }
+        if (areaId != 99){
+            wrapper.eq("area_id", areaId);
+        }
+        if (hallType != 99){
+            wrapper.like("hall_ids", hallType+"");
+        }
+        //分页
+        List<MtimeCinemaT> mtimeCinemaTS = mtimeCinemaTMapper.selectPage(rowBounds, wrapper);
+
+        for (MtimeCinemaT mtimeCinemaT : mtimeCinemaTS) {
+            CinemaVo cinemaVo = new CinemaVo();
+            //返回信息
+            cinemaVo.setCinemaAddress(mtimeCinemaT.getCinemaAddress());
+            cinemaVo.setCinemaName(mtimeCinemaT.getCinemaName());
+            cinemaVo.setUuid(mtimeCinemaT.getUuid().toString());
+            cinemaVo.setMinimumPrice(mtimeCinemaT.getMinimumPrice().toString());
+            //
+            cinemas.add(cinemaVo);
+        }
+        //计算totalPage
+        Integer integer = mtimeCinemaTMapper.selectCount(wrapper);
+        BigDecimal count = new BigDecimal(integer);
+        BigDecimal pageSizeBig = new BigDecimal(pageSize);
+        BigDecimal divide = count.divide(pageSizeBig, 0, RoundingMode.FLOOR);
+        int totalPage = divide.intValue();
+        //
+        cinemaQueryVo.setTotalPage(totalPage);
+
+        return cinemas;
+    }
 
     @Override
     public CinemaInfo getCinemaInfoByCinemaId(Integer cinemaId) {

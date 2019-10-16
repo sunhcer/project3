@@ -14,17 +14,35 @@ import java.util.Date;
  */
 @Data
 public class MtimeUserInfo implements Serializable {
-   private Integer uuid;
-   private String username;
-   private String nickname;
-   private String email;
-   private String address;
-   private String phone;
-   private Integer sex;
-   private String birthday;
-   private Integer lifeState;
-   private String biography;
-   private String headAdress;
-   private Date createTime;
-   private Date updateTime;
+    private Integer uuid;
+    private String username;
+    private String nickname;
+    private String email;
+    private String address;
+    private String phone;
+    private Integer sex;
+    private String birthday;
+    private Integer lifeState;
+    private String biography;
+    private String headAdress;
+    private Date createTime;
+    private Date updateTime;
+
+    public static MtimeUserInfo transferUser(MtimeUserT userT) {
+        MtimeUserInfo userInfo = new MtimeUserInfo();
+        userInfo.setAddress(userT.getAddress());
+        userInfo.setBiography(userT.getBiography());
+        userInfo.setBirthday(userT.getBirthday());
+        userInfo.setEmail(userT.getEmail());
+        userInfo.setCreateTime(userT.getBeginTime());
+        userInfo.setHeadAdress(userT.getHeadUrl());
+        userInfo.setLifeState(userT.getLifeState());
+        userInfo.setNickname(userT.getNickName());
+        userInfo.setPhone(userT.getUserPhone());
+        userInfo.setSex(userT.getUserSex());
+        userInfo.setUpdateTime(userT.getUpdateTime());
+        userInfo.setUsername(userT.getUserName());
+        userInfo.setUuid(userT.getUuid());
+        return userInfo;
+    }
 }
