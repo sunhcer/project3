@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stylefeng.guns.rest.cinema.model.CinemaInfo;
 import com.stylefeng.guns.rest.cinema.model.Film;
+import com.stylefeng.guns.rest.cinema.model.HallInfo;
 import com.stylefeng.guns.rest.cinema.service.CinemaService;
 import com.stylefeng.guns.rest.common.persistence.dao.MoocOrderTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.MtimeFieldTMapper;
@@ -80,7 +81,8 @@ public class OrderServiceImpl implements OrderService {
             return baseVo;
         }
 
-        String json = jedis.get("12314.json");
+        HallInfo hallInfo = cinemaService.getHallInfoByFieldId(mtimeFieldT.getUuid());
+        String json = jedis.get(hallInfo.getSeatFile());
 
         ObjectMapper objectMapper = new ObjectMapper();
         SeatsInfo seatsInfo = null;
@@ -88,6 +90,9 @@ public class OrderServiceImpl implements OrderService {
             seatsInfo = objectMapper.readValue(json, SeatsInfo.class);
         } catch (IOException e) {
             e.printStackTrace();
+            baseVo.setStatus(1);
+            baseVo.setMsg("座位解析失败 请联系管理员");
+            return baseVo;
         }
 
         //判断有没有这个座位
@@ -126,7 +131,9 @@ public class OrderServiceImpl implements OrderService {
         //合并所有座位  single是所有
         List<List<Seat>> single = seatsInfo.getSingle();
         List<List<Seat>> couple = seatsInfo.getCouple();
-        single.addAll(couple);
+        if (couple != null) {
+            single.addAll(couple);
+        }
 
         //订单id
         String outTradeNo = String.valueOf((System.currentTimeMillis() + (long) (Math.random() * 10000000L)));
@@ -216,6 +223,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderInfo> getMyOrderInfo(MyOrderPage myOrderPage, String userId) {
+        updateOrderInfo();
+
         Page<MoocOrderT> page = new Page<>();
         page.setSize(myOrderPage.getPageSize());
         page.setCurrent(myOrderPage.getNowPage());
@@ -248,6 +257,20 @@ public class OrderServiceImpl implements OrderService {
             list1.add(orderInfo);
         }
         return list1;
+    }
+
+    /**
+     * 调用查询之前 将订单的状态更新一下
+     */
+    private void updateOrderInfo() {
+        EntityWrapper<MoocOrderT> wrapper = new EntityWrapper<>();
+        wrapper.eq("order_status", 0);      //如果是未付款状态  则在下单15分钟后取消该订单
+        wrapper.le("order_time", new Date(System.currentTimeMillis() - 1000*60*15) );
+
+        MoocOrderT orderT = new MoocOrderT();
+        orderT.setOrderStatus(2);
+        moocOrderTMapper.update(orderT, wrapper);
+
     }
 }
 
