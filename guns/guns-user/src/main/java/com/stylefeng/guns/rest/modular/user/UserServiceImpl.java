@@ -8,7 +8,6 @@ import com.stylefeng.guns.rest.common.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.UserMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.common.persistence.model.User;
-import com.stylefeng.guns.rest.modular.auth.validator.dto.Credence;
 import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
 import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.UserService;

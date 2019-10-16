@@ -18,8 +18,8 @@ import java.io.Serializable;
 @TableName("mtime_hall_film_info_t")
 public class MtimeHallFilmInfoT extends Model<MtimeHallFilmInfoT> {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 6135357200455464064L;
     /**
      * 主键编号
      */

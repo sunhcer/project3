@@ -12,14 +12,12 @@ import java.io.Serializable;
  * 放映场次表
  * </p>
  *
- * @author stylefeng
  * @since 2019-10-16
  */
 @TableName("mtime_field_t")
 public class MtimeFieldT extends Model<MtimeFieldT> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -1964909354747513398L;
     /**
      * 主键编号
      */

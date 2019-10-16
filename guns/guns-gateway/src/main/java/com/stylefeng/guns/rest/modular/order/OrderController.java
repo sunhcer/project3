@@ -11,8 +11,15 @@ import com.stylefeng.guns.rest.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.stylefeng.guns.rest.config.properties.JwtProperties;
+import com.stylefeng.guns.rest.order.model.BaseOrderResponseVO;
+import com.stylefeng.guns.rest.order.model.MyOrderPage;
+import com.stylefeng.guns.rest.order.model.OrderInfo;
+import org.springframework.web.bind.annotation.RequestMapping;
+import redis.clients.jedis.Jedis;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 
 @RestController
 public class OrderController {
@@ -24,6 +31,12 @@ public class OrderController {
 
     @Reference(interfaceClass = OrderService.class, check = false)
     OrderService orderService;
+
+    @Autowired
+    JwtProperties jwtProperties;
+
+    @Autowired
+    Jedis jedis;
 
 
     ///order/buyTickets
@@ -41,4 +54,22 @@ public class OrderController {
 
         return baseVo;
     }
+
+    //获取该用户的订单信息
+    @RequestMapping("/order/getOrderInfo")
+    public BaseOrderResponseVO getMyOrderInfo(MyOrderPage myOrderPage, HttpServletRequest request){
+        String userId = jedisUtil.getUserId(request);   //拿到该userId
+//        String userId=1+"";
+        List<OrderInfo> myOrderInfo = orderService.getMyOrderInfo(myOrderPage, userId);
+        BaseOrderResponseVO VO = new BaseOrderResponseVO();
+        if(myOrderInfo==null){
+            VO.setStatus(1);
+            VO.setMsg("订单列表为空哦！~");
+        }else {
+            VO.setData(myOrderInfo);
+            VO.setStatus(0);
+        }
+        return VO;
+    }
 }
+

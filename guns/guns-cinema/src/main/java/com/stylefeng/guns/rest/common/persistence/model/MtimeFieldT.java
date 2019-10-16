@@ -18,8 +18,8 @@ import java.io.Serializable;
 @TableName("mtime_field_t")
 public class MtimeFieldT extends Model<MtimeFieldT> {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = -1964909354747513398L;
     /**
      * 主键编号
      */

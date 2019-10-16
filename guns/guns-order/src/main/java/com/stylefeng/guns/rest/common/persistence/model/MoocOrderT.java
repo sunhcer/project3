@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
+
 
 /**
  * <p>
@@ -25,8 +25,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class MoocOrderT extends Model<MoocOrderT> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -8262607212766032543L;
     /**
      * 主键编号
      */
