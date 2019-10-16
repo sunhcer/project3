@@ -16,7 +16,7 @@ import java.util.Date;
  * 订单信息表
  * </p>
  *
- * @author stylefeng
+ * @author sxg
  * @since 2019-10-16
  */
 @TableName("mooc_order_t")

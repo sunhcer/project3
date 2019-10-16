@@ -17,4 +17,7 @@
         <result column="order_status" property="orderStatus" />
     </resultMap>
 
+    <update id="updateOrderStatusBySandBox">
+        update mooc_order_t set order_status=1 where UUID=#{orderId}
+    </update>
 </mapper>

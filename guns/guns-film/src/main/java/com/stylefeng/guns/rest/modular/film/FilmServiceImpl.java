@@ -232,7 +232,6 @@ public class FilmServiceImpl implements FilmService {
         for (MtimeFilmT mtimeFilmT : mtimeFilmTS) {
             Integer filmId = mtimeFilmT.getUuid();
             MtimeFilmInfoT mtimeFilmInfoT = filmInfoTMapper.selectById(filmId);
-
             Integer boxNum = mtimeFilmT.getFilmBoxOffice();     //票房
             String filmCats = mtimeFilmT.getFilmCats();
             Integer filmType = mtimeFilmT.getFilmType();
@@ -241,14 +240,10 @@ public class FilmServiceImpl implements FilmService {
             String filmScore = mtimeFilmT.getFilmScore();
             String imgAddress = mtimeFilmT.getImgAddress();
             Date showTime = mtimeFilmT.getFilmTime();
-
             Integer filmLength = 0;
-
-
             if (mtimeFilmInfoT != null) {
                 filmLength = mtimeFilmInfoT.getFilmLength();
             }
-
             FilmDetail filmDetail = FilmDetail.builder().boxNum(boxNum)
                     .expectNum(exceptNum)
                     .filmCats(filmCats)
