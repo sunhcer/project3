@@ -226,7 +226,10 @@ public class CinemaServiceImpl implements CinemaService {
             String seatsIds = moocOrderT.getSeatsIds();
             soldSeats.append(seatsIds).append(",");
         }
-        soldSeats.deleteCharAt(soldSeats.length() - 1);
+        if(soldSeats.length() != 0) {
+            soldSeats.deleteCharAt(soldSeats.length() - 1);
+        }
+
         return soldSeats.toString();
     }
 }
