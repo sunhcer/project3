@@ -77,19 +77,33 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer updateUserInfo(MtimeUserInfo userInfo) {
-        MtimeUserT user = mtimeUserTMapper.selectById(userInfo.getUuid());
+        MtimeUserT userT =new MtimeUserT();
+        int i;
+        try {
+            i = Integer.parseInt(userInfo.getUuid());
+        }catch (Exception e){
+            return 0;
+        }
+        userT.setUuid(i);
+        MtimeUserT user = mtimeUserTMapper.selectOne(userT);
         if (user == null) return 0;
         user.setAddress(userInfo.getAddress());
-        user.setUserSex(userInfo.getSex());
+        try {
+            user.setUserSex(Integer.parseInt(userInfo.getSex()));
+            user.setLifeState(Integer.parseInt(userInfo.getLifeState()));
+        }catch (Exception e){
+            return 0;
+        }
         user.setBiography(userInfo.getBiography());
         user.setBirthday(userInfo.getBirthday());
         user.setEmail(userInfo.getEmail());
         user.setHeadUrl(userInfo.getHeadAdress());
-        user.setLifeState(userInfo.getLifeState());
         user.setNickName(userInfo.getNickname());
         user.setUserName(userInfo.getUsername());
         user.setUserPhone(userInfo.getPhone());
-        return mtimeUserTMapper.updateById(user);
+        EntityWrapper<MtimeUserT> mtimeUserTEntityWrapper = new EntityWrapper<>();
+        mtimeUserTEntityWrapper.eq("UUID",userT.getUuid());
+        return mtimeUserTMapper.update(user,mtimeUserTEntityWrapper);
     }
 
     @Override
