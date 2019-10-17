@@ -70,11 +70,11 @@ public class SFilmServiceImpl implements SFilmService {
         int pageSize=receiveVo.getPageSize();
         int nowPage=0;
         int offset=receiveVo.getOffset();
-        if (offset<pageSize) {
+        if (offset<=pageSize) {
             sSelectFilmVo.setNowPage(1);
-        }else if (offset%pageSize==0){
+        }else if (pageSize!=0&&offset%pageSize==0){
             nowPage=offset/pageSize;
-        }else{
+        }else if (pageSize!=0){
             nowPage=offset/pageSize+1;
         }
         sSelectFilmVo.setNowPage(nowPage);

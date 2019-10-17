@@ -54,7 +54,7 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public List<CinemaVo> getCinemas(CinemaQueryVo cinemaQueryVo) {
-//        List<CinemaVo> cinemas = mtimeCinemaTMapper.getCinemas();
+//       List<CinemaVo> cinemas = mtimeCinemaTMapper.getCinemas();
         List<CinemaVo> cinemas = new ArrayList<>();
         ///cinema/getCinemas?brandId=99&areaId=7&halltypeId=1&pageSize=12&nowPage=1
         Integer nowPage = cinemaQueryVo.getNowPage();
@@ -76,7 +76,7 @@ public class CinemaServiceImpl implements CinemaService {
         if (areaId != 99){
             wrapper.eq("area_id", areaId);
         }
-        if (hallType != 99){
+        if (hallType!= 99){
             wrapper.like("hall_ids", hallType+"");
         }
         //分页

@@ -5,25 +5,29 @@ import java.io.Serializable;
 public class BrandVo implements Serializable {
 
     private static final long serialVersionUID = -9099102863266367667L;
-    private String brandId;
+    private Integer brandId;
     private  String brandName;
-    private boolean isActive;
-
-    public BrandVo(String brandId, String brandName, boolean isActive) {
-        this.brandId = brandId;
-        this.brandName = brandName;
-        this.isActive = isActive;
-    }
+    private boolean active;
 
     public BrandVo() {
 
     }
 
-    public String getBrandId() {
+    public BrandVo(Integer brandId, String brandName, boolean active) {
+        this.brandId = brandId;
+        this.brandName = brandName;
+        this.active = active;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getBrandId() {
         return brandId;
     }
 
-    public void setBrandId(String brandId) {
+    public void setBrandId(Integer brandId) {
         this.brandId = brandId;
     }
 
@@ -36,10 +40,10 @@ public class BrandVo implements Serializable {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 }

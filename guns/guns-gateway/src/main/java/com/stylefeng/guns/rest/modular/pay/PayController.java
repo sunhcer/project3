@@ -1,6 +1,10 @@
 package com.stylefeng.guns.rest.modular.pay;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.core.exception.GunsException;
+import com.stylefeng.guns.core.exception.GunsExceptionEnum;
+import com.stylefeng.guns.core.exception.ServiceExceptionEnum;
+import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.film.vo.SFilmIndexPage;
 import com.stylefeng.guns.rest.pay.model.PayResultVo;
 import com.stylefeng.guns.rest.pay.model.QROrderRef;
@@ -38,6 +42,7 @@ public class PayController {
         if (tryNums1<8) {
             int orderStatus = payService.queryOrderStatusBySandBox(orderId);
             if (orderStatus == 1) {
+
                 //已支付,去自己的数据库改变订单状态
                 filmIndexPage = sOrderService.orderGetPayResult(orderId);
                 return filmIndexPage;

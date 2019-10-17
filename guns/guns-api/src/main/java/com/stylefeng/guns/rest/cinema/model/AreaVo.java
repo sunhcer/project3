@@ -5,34 +5,45 @@ import java.io.Serializable;
 public class AreaVo implements Serializable {
 
     private static final long serialVersionUID = 1187501332204861514L;
-    private String areaId;
-   private String areaName;
-   private boolean isActive;
+    private Integer areaId;
+    private String areaName;
+    private boolean active;
 
     public AreaVo() {
 
     }
-    public AreaVo(String areaId, String areaName, boolean isActive) {
+
+    public AreaVo(Integer areaId, String areaName, boolean active) {
         this.areaId = areaId;
         this.areaName = areaName;
-        this.isActive = isActive;
+        this.active = active;
     }
-    public String getAreadId() {
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getAreaId() {
         return areaId;
     }
-    public void setAreadId(String areaId) {
+
+    public void setAreaId(Integer areaId) {
         this.areaId = areaId;
     }
+
     public String getAreaName() {
         return areaName;
     }
+
     public void setAreaName(String areaName) {
         this.areaName = areaName;
     }
+
     public boolean isActive() {
-        return isActive;
+        return active;
     }
+
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 }
