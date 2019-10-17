@@ -26,6 +26,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -438,6 +439,12 @@ public class Main {
                 dumpResponse(response);
 
                 // 需要修改为运行机器上的路径
+                String filePar = "d:\\QRcode";// 文件夹路径
+                File myPath = new File(filePar);
+                if (!myPath.exists()) {//若此目录不存在，则创建之
+                    myPath.mkdir();
+                    System.out.println("创建文件夹路径为：" + filePar);
+                }
                 String filePath = String.format("D:\\QRcode/qr-%s.png",
                     response.getOutTradeNo());
                 log.info("filePath:" + filePath);
