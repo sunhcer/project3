@@ -46,7 +46,7 @@ public class FilmServiceImpl implements FilmService {
         //前置准备
         filmResponseVO.setImgPre(myimgPrefix);
         filmResponseVO.setMsg("");
-        filmResponseVO.setNowPage(0);
+        filmResponseVO.setNowPage("");
         filmResponseVO.setTotalPage("");
 
         //查询海报信息
@@ -83,18 +83,26 @@ public class FilmServiceImpl implements FilmService {
         top100Wrapper.orderBy("film_score", false);
         FilmsDetail top100Film = getMtimeFileByWrapper(top100Wrapper);
 
-        HashMap<Object, Object> map = new HashMap<>();
+//        HashMap<Object, Object> map = new LinkedHashMap<>();
+//
+//        map.put("banners", bannerList);
+//        map.put("boxRanking", boxRanking);
+//        map.put("exceptRanking", exceptRanking);
+//        map.put("hotFilms", hotFilms);
+//        map.put("soonFilms", soonFilms);
+//        map.put("top100", top100Film.getFilmInfo());
 
-        map.put("banners", bannerList);
-        map.put("top100", top100Film.getFilmInfo());
+        IndexVO indexVO = new IndexVO();
+        indexVO.setBanners(bannerList);
+        indexVO.setBoxRanking(boxRanking);
+        indexVO.setExpectRanking(exceptRanking);
+        indexVO.setHotFilms(hotFilms);
+        indexVO.setTop100(top100Film.getFilmInfo());
+        indexVO.setSoonFilms(soonFilms);
 
-        map.put("boxRanking", boxRanking);
-        map.put("hotFilms", hotFilms);
 
-        map.put("exceptRanking", exceptRanking);
-        map.put("soonFilms", soonFilms);
-
-        filmResponseVO.setData(map);
+//        filmResponseVO.setData(map);
+        filmResponseVO.setData(indexVO);
         return filmResponseVO;
     }
 
@@ -169,6 +177,11 @@ public class FilmServiceImpl implements FilmService {
                 .info04(info4).build();
 
         responseVO.setData(searchFilmByIdBean);
+        responseVO.setStatus(0);
+        responseVO.setMsg("");
+        responseVO.setTotalPage("");
+        responseVO.setNowPage("");
+        responseVO.setImgPre(myimgPrefix);
 
         return responseVO;
     }
@@ -232,7 +245,6 @@ public class FilmServiceImpl implements FilmService {
         for (MtimeFilmT mtimeFilmT : mtimeFilmTS) {
             Integer filmId = mtimeFilmT.getUuid();
             MtimeFilmInfoT mtimeFilmInfoT = filmInfoTMapper.selectById(filmId);
-
             Integer boxNum = mtimeFilmT.getFilmBoxOffice();     //票房
             String filmCats = mtimeFilmT.getFilmCats();
             Integer filmType = mtimeFilmT.getFilmType();
@@ -241,14 +253,10 @@ public class FilmServiceImpl implements FilmService {
             String filmScore = mtimeFilmT.getFilmScore();
             String imgAddress = mtimeFilmT.getImgAddress();
             Date showTime = mtimeFilmT.getFilmTime();
-
             Integer filmLength = 0;
-
-
             if (mtimeFilmInfoT != null) {
                 filmLength = mtimeFilmInfoT.getFilmLength();
             }
-
             FilmDetail filmDetail = FilmDetail.builder().boxNum(boxNum)
                     .expectNum(exceptNum)
                     .filmCats(filmCats)
@@ -256,6 +264,7 @@ public class FilmServiceImpl implements FilmService {
                     .filmLength(filmLength.toString())
                     .filmName(fileName)
                     .filmScore(filmScore)
+                    .score(filmScore)
                     .filmType(filmType)
                     .imgAddress(imgAddress)
                     .showTime(showTime).build();
@@ -268,5 +277,35 @@ public class FilmServiceImpl implements FilmService {
         filmsDetail.setNowPage(0);
         filmsDetail.setTotalPage(0);
         return filmsDetail;
+    }
+
+    @Override
+    public FilmDetail selectFilmById(Integer filmId) {
+        MtimeFilmT mtimeFilmT = mtimeFilmTMapper.selectById(filmId);
+        if (mtimeFilmT == null){
+            //查询的模块为空
+            return null;
+        }
+
+        Integer boxNum = mtimeFilmT.getFilmBoxOffice();     //票房
+        String filmCats = mtimeFilmT.getFilmCats();
+        Integer filmType = mtimeFilmT.getFilmType();
+        Integer exceptNum = mtimeFilmT.getFilmPresalenum();
+        String fileName = mtimeFilmT.getFilmName();
+        String filmScore = mtimeFilmT.getFilmScore();
+        String imgAddress = mtimeFilmT.getImgAddress();
+        Date showTime = mtimeFilmT.getFilmTime();
+
+        FilmDetail filmDetail = FilmDetail.builder().boxNum(boxNum)
+                .expectNum(exceptNum)
+                .filmCats(filmCats)
+                .filmId(filmId)
+                .filmName(fileName)
+                .filmScore(filmScore)
+                .filmType(filmType)
+                .imgAddress(imgAddress)
+                .showTime(showTime).build();
+
+        return filmDetail;
     }
 }

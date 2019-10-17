@@ -69,6 +69,9 @@
     <if test="receiveVo.yearId != 99">
         and f.film_date=#{receiveVo.yearId}
     </if>
+    <if test="receiveVo.showType!=0">
+        and f.film_status=#{receiveVo.showType}
+    </if>
    </where>
    limit #{receiveVo.pageSize} offset #{receiveVo.offset}
     </select>

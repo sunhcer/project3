@@ -5,10 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.stylefeng.guns.rest.cinema.model.*;
 import com.stylefeng.guns.rest.cinema.service.CinemaService;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeCinemaT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeFieldT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeHallDictT;
-import com.stylefeng.guns.rest.common.persistence.model.MtimeHallFilmInfoT;
+import com.stylefeng.guns.rest.common.persistence.model.*;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +33,8 @@ public class CinemaServiceImpl implements CinemaService {
     private MtimeAreaDictTMapper mtimeAreaDictTMapper;
     @Autowired
     private MtimeHallDictTMapper mtimeHallDictTMapper;
+    @Autowired
+    private MoocOrderTMapper moocOrderTMapper;
 
     @Override
     public List<BrandVo> queryBrands(Integer brandId) {
@@ -55,7 +54,7 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public List<CinemaVo> getCinemas(CinemaQueryVo cinemaQueryVo) {
-//        List<CinemaVo> cinemas = mtimeCinemaTMapper.getCinemas();
+//       List<CinemaVo> cinemas = mtimeCinemaTMapper.getCinemas();
         List<CinemaVo> cinemas = new ArrayList<>();
         ///cinema/getCinemas?brandId=99&areaId=7&halltypeId=1&pageSize=12&nowPage=1
         Integer nowPage = cinemaQueryVo.getNowPage();
@@ -77,7 +76,7 @@ public class CinemaServiceImpl implements CinemaService {
         if (areaId != 99){
             wrapper.eq("area_id", areaId);
         }
-        if (hallType != 99){
+        if (hallType!= 99){
             wrapper.like("hall_ids", hallType+"");
         }
         //分页
@@ -193,7 +192,7 @@ public class CinemaServiceImpl implements CinemaService {
                 .hallName(mtimeFieldT.getHallName())
                 .price(mtimeFieldT.getPrice().toString())
                 .seatFile(seatAddress)
-                .soldSeats("3,5,7,8,9,10")
+                .soldSeats(getSoldSeatsByFieldId(fieldId))
                 .build();
 
         return hallInfo;
@@ -214,6 +213,24 @@ public class CinemaServiceImpl implements CinemaService {
                 .build();
 
         return film;
+    }
+
+
+    //根据fieldId查已售出座位
+    private String getSoldSeatsByFieldId(Integer fieldId) {
+        EntityWrapper<MoocOrderT> wrapper = new EntityWrapper<>();
+        wrapper.eq("field_id",fieldId);
+        List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(wrapper);
+        StringBuilder soldSeats = new StringBuilder();
+        for (MoocOrderT moocOrderT : moocOrderTS) {
+            String seatsIds = moocOrderT.getSeatsIds();
+            soldSeats.append(seatsIds).append(",");
+        }
+        if(soldSeats.length() != 0) {
+            soldSeats.deleteCharAt(soldSeats.length() - 1);
+        }
+
+        return soldSeats.toString();
     }
 }
 

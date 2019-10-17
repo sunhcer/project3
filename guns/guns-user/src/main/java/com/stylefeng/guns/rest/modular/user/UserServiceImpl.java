@@ -8,7 +8,6 @@ import com.stylefeng.guns.rest.common.persistence.dao.MtimeUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.dao.UserMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MtimeUserT;
 import com.stylefeng.guns.rest.common.persistence.model.User;
-import com.stylefeng.guns.rest.modular.auth.validator.dto.Credence;
 import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
 import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.UserService;
@@ -41,7 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int userCheck(String username) {
-        int i = mtimeUserTMapper.selectByUserName(username);
+        EntityWrapper<MtimeUserT> mtimeUserTEntityWrapper = new EntityWrapper<>();
+        mtimeUserTEntityWrapper.eq("user_name",username);
+        int i = mtimeUserTMapper.selectList(mtimeUserTEntityWrapper).size();
         if (i == 0) {//没有该用户名
             return 0;
         } else {
@@ -53,7 +54,9 @@ public class UserServiceImpl implements UserService {
     public int userRegister(UserRegister userRegister) {
         //先判断该表中 有没有此username
         String username = userRegister.getUsername();
-        int i = mtimeUserTMapper.selectByUserName(username);
+        EntityWrapper<MtimeUserT> mtimeUserTEntityWrapper = new EntityWrapper<>();
+        mtimeUserTEntityWrapper.eq("user_name",username);
+        int i = mtimeUserTMapper.selectList(mtimeUserTEntityWrapper).size();
         if (i == 0) {//没有该用户名
             MtimeUserT mtimeUserT = new MtimeUserT();
             mtimeUserT.setUserName(userRegister.getUsername());
@@ -113,7 +116,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getUserId(String username) {
-        MtimeUserT mtimeUserT = mtimeUserTMapper.selectUserByUserName(username);
+        MtimeUserT userT = new MtimeUserT();
+        userT.setUserName(username);
+        MtimeUserT mtimeUserT = mtimeUserTMapper.selectOne(userT);
         return mtimeUserT.getUuid();
     }
 }

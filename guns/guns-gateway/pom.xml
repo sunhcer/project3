@@ -61,11 +61,11 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.8</version>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
     </dependencies>
 

@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class BaseFilmResponseVO<T> implements Serializable {
     private String imgPre;
     private String msg;
-    private Integer nowPage;
+    private String nowPage;
     private Integer status;
     private String totalPage;
     private T data;
