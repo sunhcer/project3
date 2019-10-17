@@ -38,13 +38,16 @@ public class PayController {
         int tryNums1=Integer.valueOf(resultVo.getTryNums());
 //        int orderId1=Integer.valueOf(resultVo.getOrderId());
         String orderId = resultVo.getOrderId();
-        SFilmIndexPage filmIndexPage=new SFilmIndexPage();
-        if (tryNums1<4){
-            int orderStatus=payService.queryOrderStatusBySandBox(orderId);
-            if (orderStatus==1) {
+        SFilmIndexPage filmIndexPage = new SFilmIndexPage();
+        if (tryNums1<8) {
+            int orderStatus = payService.queryOrderStatusBySandBox(orderId);
+            if (orderStatus == 1) {
+
                 //已支付,去自己的数据库改变订单状态
                 filmIndexPage = sOrderService.orderGetPayResult(orderId);
-            }else{
+                return filmIndexPage;
+            }
+        }
                 //未支付,返回一个支付失败
                 filmIndexPage.setData("");
                 filmIndexPage.setImgPre("");
@@ -52,8 +55,7 @@ public class PayController {
                 filmIndexPage.setTotalPage("");
                 filmIndexPage.setStatus(1);
                 filmIndexPage.setMsg("支付失败!");
-            }
-        }
+
         return filmIndexPage;
     }
 }
