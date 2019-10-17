@@ -74,8 +74,10 @@ public class MtimeUserTServiceImpl implements MtimeUserTService {
         MtimeUserTMapper userTMapper = this.userTMapper;
         EntityWrapper<MtimeUserT> wrapper = new EntityWrapper<>();
         wrapper.eq("uuid", userId);
-
-        MtimeUserT userT = userTMapper.selectById(userId);
+        List<MtimeUserT> mtimeUserTS = userTMapper.selectList(wrapper);
+        MtimeUserT userT = new MtimeUserT();
+        if(mtimeUserTS!=null&&mtimeUserTS.size()>0)
+        userT=mtimeUserTS.get(0);
         if(userT==null)
             return null;
         return getMtimeUserInfo(userT);
