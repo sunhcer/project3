@@ -22,7 +22,7 @@ public class PayServiceImpl implements PayService {
         SFilmIndexPage<PayDataRef> page = new SFilmIndexPage<>();
         page.setStatus(0);
         page.setData(payDataRef);
-        page.setImgPre("http://www.duolaima.com");
+        page.setImgPre("http://localhost");
         return page;
     }
 
