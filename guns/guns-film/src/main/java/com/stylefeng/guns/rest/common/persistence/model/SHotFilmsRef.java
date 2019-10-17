@@ -7,7 +7,7 @@ import java.util.List;
 @Data
 public class SHotFilmsRef implements Serializable {
     List<SBoxRankingRef> filmInfo;
-    int filmNum;
+    Object filmNum;
     String nowPage;
     String totalPage;
 }
