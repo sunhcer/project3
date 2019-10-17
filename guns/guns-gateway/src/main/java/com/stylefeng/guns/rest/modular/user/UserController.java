@@ -3,8 +3,10 @@ package com.stylefeng.guns.rest.modular.user;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
 import com.stylefeng.guns.rest.modular.auth.util.JedisUtil;
-import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
-import com.stylefeng.guns.rest.user.model.*;
+import com.stylefeng.guns.rest.user.model.BaseUserResponseVO;
+import com.stylefeng.guns.rest.user.model.BaseVo;
+import com.stylefeng.guns.rest.user.model.MtimeUserInfo;
+import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.MtimeUserTService;
 import com.stylefeng.guns.rest.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @Description:
@@ -63,7 +67,7 @@ public class UserController {
     public BaseVo getUserInfoByToken(HttpServletRequest request) {
 //        jwtProperties.
         String userId = jedisUtil.getUserId(request);
-        MtimeUserInfo userInfo= mtimeUserTService.selectUserInfoById(userId);
+        MtimeUserInfo userInfo = mtimeUserTService.selectUserInfoById(userId);
         return BaseVo.successVo(userInfo, null);
     }
 
@@ -98,35 +102,40 @@ public class UserController {
     @RequestMapping("/user/updateUserInfo")
     public BaseVo userUpdate(MtimeUserInfo userInfo) {
         Integer result = userService.updateUserInfo(userInfo);
-        if(result !=null&&result>0)
-        return BaseVo.successVo(userInfo,null);
-        return BaseVo.errorVo(1,"修改用户信息失败");
+        if (result != null && result > 0)
+            return BaseVo.successVo(userInfo, null);
+        return BaseVo.errorVo(1, "修改用户信息失败");
     }
 
     ///user/logout
     @RequestMapping("/user/logout")
-    public BaseVo logout(HttpServletRequest request){
+    public BaseVo logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;
+        BaseVo baseVo = new BaseVo();
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
             String flag = jedis.get(authToken);
-            BaseVo baseVo = new BaseVo();
-            if (flag == null) {
-                baseVo.setStatus(1);
-                baseVo.setMsg("退出失败，用户尚未登陆");
-                return baseVo;
-            }
-            jedis.expire(authToken, 0);      //清除token
-            baseVo.setStatus(0);
-            baseVo.setMsg("退出成功");
-            return baseVo;
-        }else{
-            BaseVo baseVo = new BaseVo();
-            baseVo.setStatus(1);
-            baseVo.setMsg("退出失败，用户尚未登陆");
-            return baseVo;
+//            if (flag == null) {
+//                baseVo.setStatus(1);
+//                baseVo.setMsg("退出失败，用户尚未登陆");
+//                return baseVo;
+//            }
+            jedis.del(authToken);
         }
+//        }else{
+//            BaseVo baseVo = new BaseVo();
+//            baseVo.setStatus(1);
+//            baseVo.setMsg("退出失败，用户尚未登陆");
+//            return baseVo;
+//        }
+
+//        response.sendRedirect("/");
+        baseVo.setStatus(0);
+        baseVo.setMsg("退出成功");
+        return baseVo;
+
     }
+
 
 }
