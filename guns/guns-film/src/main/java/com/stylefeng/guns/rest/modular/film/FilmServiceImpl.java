@@ -232,7 +232,6 @@ public class FilmServiceImpl implements FilmService {
         for (MtimeFilmT mtimeFilmT : mtimeFilmTS) {
             Integer filmId = mtimeFilmT.getUuid();
             MtimeFilmInfoT mtimeFilmInfoT = filmInfoTMapper.selectById(filmId);
-
             Integer boxNum = mtimeFilmT.getFilmBoxOffice();     //票房
             String filmCats = mtimeFilmT.getFilmCats();
             Integer filmType = mtimeFilmT.getFilmType();
@@ -241,14 +240,10 @@ public class FilmServiceImpl implements FilmService {
             String filmScore = mtimeFilmT.getFilmScore();
             String imgAddress = mtimeFilmT.getImgAddress();
             Date showTime = mtimeFilmT.getFilmTime();
-
             Integer filmLength = 0;
-
-
             if (mtimeFilmInfoT != null) {
                 filmLength = mtimeFilmInfoT.getFilmLength();
             }
-
             FilmDetail filmDetail = FilmDetail.builder().boxNum(boxNum)
                     .expectNum(exceptNum)
                     .filmCats(filmCats)
@@ -268,5 +263,35 @@ public class FilmServiceImpl implements FilmService {
         filmsDetail.setNowPage(0);
         filmsDetail.setTotalPage(0);
         return filmsDetail;
+    }
+
+    @Override
+    public FilmDetail selectFilmById(Integer filmId) {
+        MtimeFilmT mtimeFilmT = mtimeFilmTMapper.selectById(filmId);
+        if (mtimeFilmT == null){
+            //查询的模块为空
+            return null;
+        }
+
+        Integer boxNum = mtimeFilmT.getFilmBoxOffice();     //票房
+        String filmCats = mtimeFilmT.getFilmCats();
+        Integer filmType = mtimeFilmT.getFilmType();
+        Integer exceptNum = mtimeFilmT.getFilmPresalenum();
+        String fileName = mtimeFilmT.getFilmName();
+        String filmScore = mtimeFilmT.getFilmScore();
+        String imgAddress = mtimeFilmT.getImgAddress();
+        Date showTime = mtimeFilmT.getFilmTime();
+
+        FilmDetail filmDetail = FilmDetail.builder().boxNum(boxNum)
+                .expectNum(exceptNum)
+                .filmCats(filmCats)
+                .filmId(filmId)
+                .filmName(fileName)
+                .filmScore(filmScore)
+                .filmType(filmType)
+                .imgAddress(imgAddress)
+                .showTime(showTime).build();
+
+        return filmDetail;
     }
 }

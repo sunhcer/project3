@@ -1,24 +1,31 @@
 package com.stylefeng.guns.rest.common.persistence.model;
 
-import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
+import java.util.Date;
+
 
 /**
  * <p>
  * 订单信息表
  * </p>
  *
- * @author ywx
+ * @author sxg
  * @since 2019-10-16
  */
 @TableName("mooc_order_t")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MoocOrderT extends Model<MoocOrderT> {
 
-    private static final long serialVersionUID = 1L;
-
+    private static final long serialVersionUID = -8262607212766032543L;
     /**
      * 主键编号
      */

@@ -1,6 +1,7 @@
 package com.stylefeng.guns.rest.film.service;
 
 import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
+import com.stylefeng.guns.rest.film.model.FilmDetail;
 
 /**
  * @Description:
@@ -15,4 +16,6 @@ public interface FilmService {
     public BaseFilmResponseVO<Object> searchFilmById(String info);
 
     public BaseFilmResponseVO<Object> searchFilmsByName(String info);
+
+    FilmDetail selectFilmById(Integer filmId);
 }
