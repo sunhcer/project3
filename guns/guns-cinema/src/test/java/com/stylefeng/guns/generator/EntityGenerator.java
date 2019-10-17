@@ -29,7 +29,7 @@ public class EntityGenerator {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("G:\\git\\repository1\\project3\\guns\\guns-cinema\\src\\main\\java");//这里写你自己的java目录
+        gc.setOutputDir("D:\\project3\\guns\\guns-cinema\\src\\main\\java");//这里写你自己的java目录
 
         gc.setFileOverride(true);//是否覆盖
         gc.setActiveRecord(true);
@@ -59,7 +59,7 @@ public class EntityGenerator {
         StrategyConfig strategy = new StrategyConfig();
         //strategy.setTablePrefix(new String[]{"_"});// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
-        strategy.setInclude(new String[]{"mtime_area_dict_t"});
+        strategy.setInclude(new String[]{"mooc_order_t"});
 
         mpg.setStrategy(strategy);
 

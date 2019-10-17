@@ -13,11 +13,11 @@ import redis.clients.jedis.Jedis;
 @RestController
 public class PayController {
 
-    @Reference(interfaceClass = SOrderService.class)
+    @Reference(interfaceClass = SOrderService.class,check = false)
     SOrderService sOrderService;
     @Autowired
     Jedis jedis;
-    @Reference(interfaceClass = PayService.class)
+    @Reference(interfaceClass = PayService.class,check = false)
     PayService payService;
     @RequestMapping("order/getPayInfo")
     //测试参数接收post
