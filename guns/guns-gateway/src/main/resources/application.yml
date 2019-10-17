@@ -49,4 +49,4 @@ logging:
   path: logs/
   file: guns-gateway.log
 myexpire: 1200    #token过期时间
-film-seats:  12314.json,4d.json,4dx.json
+film-seats:  123214.json,4d.json,4dx.json,12314.json

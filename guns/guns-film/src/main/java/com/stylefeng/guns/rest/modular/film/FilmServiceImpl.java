@@ -83,18 +83,26 @@ public class FilmServiceImpl implements FilmService {
         top100Wrapper.orderBy("film_score", false);
         FilmsDetail top100Film = getMtimeFileByWrapper(top100Wrapper);
 
-        HashMap<Object, Object> map = new HashMap<>();
+//        HashMap<Object, Object> map = new LinkedHashMap<>();
+//
+//        map.put("banners", bannerList);
+//        map.put("boxRanking", boxRanking);
+//        map.put("exceptRanking", exceptRanking);
+//        map.put("hotFilms", hotFilms);
+//        map.put("soonFilms", soonFilms);
+//        map.put("top100", top100Film.getFilmInfo());
 
-        map.put("banners", bannerList);
-        map.put("top100", top100Film.getFilmInfo());
+        IndexVO indexVO = new IndexVO();
+        indexVO.setBanners(bannerList);
+        indexVO.setBoxRanking(boxRanking);
+        indexVO.setExpectRanking(exceptRanking);
+        indexVO.setHotFilms(hotFilms);
+        indexVO.setTop100(top100Film.getFilmInfo());
+        indexVO.setSoonFilms(soonFilms);
 
-        map.put("boxRanking", boxRanking);
-        map.put("hotFilms", hotFilms);
 
-        map.put("exceptRanking", exceptRanking);
-        map.put("soonFilms", soonFilms);
-
-        filmResponseVO.setData(map);
+//        filmResponseVO.setData(map);
+        filmResponseVO.setData(indexVO);
         return filmResponseVO;
     }
 
@@ -169,6 +177,11 @@ public class FilmServiceImpl implements FilmService {
                 .info04(info4).build();
 
         responseVO.setData(searchFilmByIdBean);
+        responseVO.setStatus(0);
+        responseVO.setMsg("");
+        responseVO.setTotalPage("");
+        responseVO.setNowPage("");
+        responseVO.setImgPre(myimgPrefix);
 
         return responseVO;
     }
