@@ -52,4 +52,4 @@ logging:
   path: logs/
   file: guns-gateway.log
 myexpire: 6000    #token过期时间
-film-seats:  123214.json,4d.json,4dx.json,12314.json
+film-seats:  imax.json,cgs.json,dubiquanjingsheng.json,dolby-cinema.json,reald-6fl.json,luxe.json,4dx.json,dts-x.json,kids.json,4k.json,4d.json,jumu.json

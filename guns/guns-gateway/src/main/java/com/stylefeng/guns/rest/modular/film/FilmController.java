@@ -1,8 +1,6 @@
 package com.stylefeng.guns.rest.modular.film;
 
 import com.alibaba.dubbo.config.annotation.Reference;
-import com.stylefeng.guns.core.exception.GunsException;
-import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
 import com.stylefeng.guns.rest.film.service.FilmService;
 import com.stylefeng.guns.rest.film.service.SFilmService;
@@ -42,11 +40,19 @@ public class FilmController {
                 responseVO = filmService.searchFilmsByName(info);
             }
         }catch (Exception e){
-            throw new GunsException(BizExceptionEnum.SYSTEM_EXCEPTION);
+//            throw new GunsException(BizExceptionEnum.SYSTEM_EXCEPTION);
+            responseVO.setStatus(999);
+            responseVO.setCode(999);
+            responseVO.setMsg("系统出现异常，请联系管理员");
+            return responseVO;
         }
 
         if(responseVO.getData() == null){
-            throw new GunsException(BizExceptionEnum.FILM_EMPTY_EXCEPTION);
+//            throw new GunsException(BizExceptionEnum.FILM_EMPTY_EXCEPTION);
+            responseVO.setStatus(999);
+            responseVO.setCode(999);
+            responseVO.setMsg("系统出现异常，请联系管理员");
+            return responseVO;
         }
 
         return responseVO;

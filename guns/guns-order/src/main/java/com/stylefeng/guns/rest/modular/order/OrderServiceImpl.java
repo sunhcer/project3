@@ -254,7 +254,8 @@ public class OrderServiceImpl implements OrderService {
             }else {
                 orderInfo.setOrderStatus("已关闭");//     6
             }
-            orderInfo.setOrderTimestamp("1571206839");//     7
+//            orderInfo.setOrderTimestamp("1571206839");//     7
+            orderInfo.setOrderTimestamp(String.valueOf(order.getOrderTime().getTime() / 1000));//     7
             orderInfo.setSeatsName(order.getSeatsIds());//  8
             list1.add(orderInfo);
         }
@@ -272,7 +273,6 @@ public class OrderServiceImpl implements OrderService {
         MoocOrderT orderT = new MoocOrderT();
         orderT.setOrderStatus(2);
         moocOrderTMapper.update(orderT, wrapper);
-
     }
 }
 

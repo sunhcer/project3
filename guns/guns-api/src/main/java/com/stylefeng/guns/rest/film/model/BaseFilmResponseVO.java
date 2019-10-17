@@ -17,5 +17,6 @@ public class BaseFilmResponseVO<T> implements Serializable {
     private String nowPage;
     private Integer status;
     private String totalPage;
+    private Integer code;
     private T data;
 }
