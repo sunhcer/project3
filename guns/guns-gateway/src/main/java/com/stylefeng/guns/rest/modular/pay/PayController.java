@@ -1,6 +1,10 @@
 package com.stylefeng.guns.rest.modular.pay;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.stylefeng.guns.core.exception.GunsException;
+import com.stylefeng.guns.core.exception.GunsExceptionEnum;
+import com.stylefeng.guns.core.exception.ServiceExceptionEnum;
+import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.film.vo.SFilmIndexPage;
 import com.stylefeng.guns.rest.pay.model.PayResultVo;
 import com.stylefeng.guns.rest.pay.model.QROrderRef;
