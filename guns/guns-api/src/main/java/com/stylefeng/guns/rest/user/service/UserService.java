@@ -11,6 +11,7 @@ import com.stylefeng.guns.rest.user.model.UserRegister;
  * @Time 17:12
  */
 public interface UserService {
+
     String selectUserNameById(Integer id);
 
     int userCheck(String username);
