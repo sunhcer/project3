@@ -38,7 +38,7 @@ public class PayController {
         int tryNums1=Integer.valueOf(resultVo.getTryNums());
 //        int orderId1=Integer.valueOf(resultVo.getOrderId());
         String orderId = resultVo.getOrderId();
-        SFilmIndexPage filmIndexPage=null;
+        SFilmIndexPage filmIndexPage=new SFilmIndexPage();
         if (tryNums1<4){
             int orderStatus=payService.queryOrderStatusBySandBox(orderId);
             if (orderStatus==1) {
