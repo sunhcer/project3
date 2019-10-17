@@ -34,6 +34,8 @@ public class SFilmServiceImpl implements SFilmService {
         SHotFilmsRef hotFilmsRef = new SHotFilmsRef();
         hotFilmsRef.setFilmInfo(hotFilms);
         hotFilmsRef.setFilmNum(hotFilms.size());
+        hotFilmsRef.setNowPage("");
+        hotFilmsRef.setTotalPage("");
 
         List<SBoxRankingRef> filmInfo=filmTMapper.queryFilmListByStatus(2);
         SHotFilmsRef soonFilmsRef1 = new SHotFilmsRef();
@@ -44,6 +46,7 @@ public class SFilmServiceImpl implements SFilmService {
         sDataIndexRef.setBanners(banners);
         sDataIndexRef.setBoxRanking(boxRanking);
         sDataIndexRef.setExpectRanking(expectRanking);
+        sDataIndexRef.setSoonFilms(soonFilmsRef1);
         sDataIndexRef.setHotFilms(hotFilmsRef);
         sDataIndexRef.setTop100(topHudersd);
         SFilmIndexPage<SDataIndexRef> sDataIndexRefSFilmIndexPage = new SFilmIndexPage<>();
