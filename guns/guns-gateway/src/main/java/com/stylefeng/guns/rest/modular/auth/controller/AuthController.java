@@ -44,6 +44,7 @@ public class AuthController {
         if (validate) {
             final String randomKey = jwtTokenUtil.getRandomKey();
             final String token = jwtTokenUtil.generateToken(authRequest.getUserName(), randomKey);
+
             int userId = userService.getUserId(authRequest.getCredenceName());
 
             //将其登录信息放入redis

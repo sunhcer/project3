@@ -25,6 +25,9 @@ public class JedisUtil {
     public String getUserId(HttpServletRequest request) {
         String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;
+        if (requestHeader== null || requestHeader.length() == 0){
+            return null;
+        }
         authToken = requestHeader.substring(7);
         String id = jedis.get(authToken);
         return id;
