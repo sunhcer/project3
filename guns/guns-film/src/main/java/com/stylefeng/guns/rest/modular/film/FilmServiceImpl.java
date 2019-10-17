@@ -46,7 +46,7 @@ public class FilmServiceImpl implements FilmService {
         //前置准备
         filmResponseVO.setImgPre(myimgPrefix);
         filmResponseVO.setMsg("");
-        filmResponseVO.setNowPage(0);
+        filmResponseVO.setNowPage("");
         filmResponseVO.setTotalPage("");
 
         //查询海报信息
@@ -251,6 +251,7 @@ public class FilmServiceImpl implements FilmService {
                     .filmLength(filmLength.toString())
                     .filmName(fileName)
                     .filmScore(filmScore)
+                    .score(filmScore)
                     .filmType(filmType)
                     .imgAddress(imgAddress)
                     .showTime(showTime).build();

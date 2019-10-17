@@ -25,6 +25,7 @@ public class FilmController {
     @GetMapping("/film/getIndex")
     public BaseFilmResponseVO getFilmIndex() {
         BaseFilmResponseVO filmIndex = filmService.getFilmIndex();
+        filmIndex.setStatus(0);
         return filmIndex;
     }
 

@@ -20,4 +20,18 @@
     <update id="updateOrderStatusBySandBox">
         update mooc_order_t set order_status=1 where UUID=#{orderId}
     </update>
+    <select id="queryOrderPrice" resultMap="queryOrderPriceMap">
+        select o.UUID,o.order_price,o.seats_ids,c.cinema_name,f.film_name
+        from mooc_order_t o left join
+        mtime_cinema_t c  on o.cinema_id=c.UUID
+        left join mtime_film_t f on o.film_id=f.UUID
+        Where o.UUID=#{orderId}
+   </select>
+        <resultMap id="queryOrderPriceMap" type="com.stylefeng.guns.rest.pay.model.QROrderRef">
+            <result column="UUID" property="UUID"/>
+            <result column="order_price" property="orderPrice"/>
+            <result column="seats_ids" property="seatsIds"/>
+            <result column="cinema_name" property="cinemaName"/>
+            <result column="film_name" property="filmName"/>
+        </resultMap>
 </mapper>
