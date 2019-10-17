@@ -285,9 +285,9 @@ public class Main {
     }
 
     // 测试当面付2.0查询订单
-    public int test_trade_query(int orderId) {
+    public int test_trade_query(String orderId) {
         // (必填) 商户订单号，通过此商户订单号查询当面付的交易状态
-        String outTradeNo = orderId+"";
+        String outTradeNo = orderId;
 
         // 创建查询请求builder，设置请求参数
         AlipayTradeQueryRequestBuilder builder = new AlipayTradeQueryRequestBuilder()
