@@ -44,13 +44,17 @@ public class OrderController {
     public BaseVo buyTickets(BuyTicketsVO buyTicketsVO, HttpServletRequest request){
         String userId = jedisUtil.getUserId(request);
 
+        BaseVo baseVo = new BaseVo();
+
         //如果用户id不为空
         if (userId == null){
             //token验证失效
-            throw new GunsException(BizExceptionEnum.TOKEN_ERROR);
+            baseVo.setStatus(700);
+//            throw new GunsException(BizExceptionEnum.TOKEN_ERROR);
+            return baseVo;
         }
 
-        BaseVo baseVo = orderService.buyTickets(userId, buyTicketsVO);
+        baseVo = orderService.buyTickets(userId, buyTicketsVO);
 
         return baseVo;
     }
