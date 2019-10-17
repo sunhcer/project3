@@ -42,20 +42,20 @@ public class OrderController {
     @PostMapping("/order/buyTickets")
     public BaseVo buyTickets(BuyTicketsVO buyTicketsVO, HttpServletRequest request){
         String userId = jedisUtil.getUserId(request);
-//        String requestHeader = request.getHeader(jwtProperties.getHeader());
+        String requestHeader = request.getHeader(jwtProperties.getHeader());
         BaseVo baseVo = new BaseVo();
 
-//       if(requestHeader == null || requestHeader.length() == 0) {
-//            //未登录
-//            baseVo.setStatus(600);
-//            return baseVo;
-//        }
-//        if (userId == null){
-//            //token验证失效
-//            baseVo.setStatus(700);
+       if(requestHeader == null || requestHeader.length() == 0) {
+            //未登录
+            baseVo.setStatus(600);
+            return baseVo;
+        }
+        if (userId == null){
+            //token验证失效
+            baseVo.setStatus(700);
 //            throw new GunsException(BizExceptionEnum.TOKEN_ERROR);
-//            return baseVo;
-//        }
+            return baseVo;
+        }
 
         baseVo = orderService.buyTickets(userId, buyTicketsVO);
 
