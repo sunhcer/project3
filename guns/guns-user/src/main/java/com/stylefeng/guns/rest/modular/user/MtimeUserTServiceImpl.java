@@ -41,20 +41,31 @@ public class MtimeUserTServiceImpl implements MtimeUserTService {
         MtimeUserT userT1 = new MtimeUserT();
         userT1.setUserName(username);
         MtimeUserT userT = userTMapper.selectOne(userT1);
+        if(userT!=null)
+        return getMtimeUserInfo(userT);
+        return null;
+    }
+
+    private MtimeUserInfo getMtimeUserInfo(MtimeUserT userT) {
         MtimeUserInfo userInfo=new MtimeUserInfo();
         userInfo.setAddress(userT.getAddress());
         userInfo.setBiography(userT.getBiography());
         userInfo.setBirthday(userT.getBirthday());
         userInfo.setEmail(userT.getEmail());
-        userInfo.setCreateTime(userT.getBeginTime());
+        if(userT.getBeginTime()!=null)
+        userInfo.setCreateTime(userT.getBeginTime().toString());
         userInfo.setHeadAdress(userT.getHeadUrl());
-        userInfo.setLifeState(userT.getLifeState());
+        if(userT.getLifeState()!=null)
+        userInfo.setLifeState(userT.getLifeState().toString());
         userInfo.setNickname(userT.getNickName());
         userInfo.setPhone(userT.getUserPhone());
-        userInfo.setSex(userT.getUserSex());
-        userInfo.setUpdateTime(userT.getUpdateTime());
+        if(userT.getUserSex()!=null)
+        userInfo.setSex(userT.getUserSex().toString());
+        if(userT.getUpdateTime()!=null)
+        userInfo.setUpdateTime(userT.getUpdateTime().toString());
         userInfo.setUsername(userT.getUserName());
-        userInfo.setUuid(userT.getUuid());
+        if(userT.getUuid()!=null)
+        userInfo.setUuid(userT.getUuid().toString());
         return userInfo;
     }
 
@@ -65,21 +76,9 @@ public class MtimeUserTServiceImpl implements MtimeUserTService {
         wrapper.eq("uuid", userId);
 
         MtimeUserT userT = userTMapper.selectById(userId);
-        MtimeUserInfo userInfo = new MtimeUserInfo();
-        userInfo.setAddress(userT.getAddress());
-        userInfo.setBiography(userT.getBiography());
-        userInfo.setBirthday(userT.getBirthday());
-        userInfo.setEmail(userT.getEmail());
-        userInfo.setCreateTime(userT.getBeginTime());
-        userInfo.setHeadAdress(userT.getHeadUrl());
-        userInfo.setLifeState(userT.getLifeState());
-        userInfo.setNickname(userT.getNickName());
-        userInfo.setPhone(userT.getUserPhone());
-        userInfo.setSex(userT.getUserSex());
-        userInfo.setUpdateTime(userT.getUpdateTime());
-        userInfo.setUsername(userT.getUserName());
-        userInfo.setUuid(userT.getUuid());
-        return userInfo;
+        if(userT==null)
+            return null;
+        return getMtimeUserInfo(userT);
     }
 
     /*@Override
