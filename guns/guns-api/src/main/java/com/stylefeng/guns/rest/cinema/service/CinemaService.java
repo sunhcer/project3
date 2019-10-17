@@ -14,6 +14,7 @@ public interface CinemaService {
     List<BrandVo> queryBrands(Integer brandId);
     List<AreaVo> queryAreas(Integer areaId);
     List<HallTypeVo> queryHallTypes(Integer hallType);
+
     //接口1
     List<CinemaVo> getCinemas(CinemaQueryVo cinemaQueryVo);
 

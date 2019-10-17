@@ -11,7 +11,7 @@ public class CinemaQueryVo  implements Serializable {
    private Integer areaId=99;
    private Integer pageSize=12;
    private Integer nowPage=1;
-   private Integer totalPage;
+   private Integer totalPage=1;
 
    public Integer getTotalPage() {
       return totalPage;

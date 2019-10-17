@@ -5,25 +5,29 @@ import java.io.Serializable;
 public class HallTypeVo implements Serializable {
 
     private static final long serialVersionUID = -7234046996146649090L;
-    private String halltypeId;
+    private Integer halltypeId;
     private String halltypeName;
-    private boolean isActive;
-
-    public HallTypeVo(String halltypeId, String halltypeName, boolean isActive) {
-        this.halltypeId = halltypeId;
-        this.halltypeName = halltypeName;
-        this.isActive = isActive;
-    }
+    private boolean active;
 
     public HallTypeVo() {
 
     }
 
-    public String getHalltypeId() {
+    public HallTypeVo(Integer halltypeId, String halltypeName, boolean active) {
+        this.halltypeId = halltypeId;
+        this.halltypeName = halltypeName;
+        this.active = active;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getHalltypeId() {
         return halltypeId;
     }
 
-    public void setHalltypeId(String halltypeId) {
+    public void setHalltypeId(Integer halltypeId) {
         this.halltypeId = halltypeId;
     }
 
@@ -36,10 +40,10 @@ public class HallTypeVo implements Serializable {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 }
