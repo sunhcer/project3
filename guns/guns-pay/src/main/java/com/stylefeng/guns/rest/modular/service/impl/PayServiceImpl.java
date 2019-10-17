@@ -22,12 +22,12 @@ public class PayServiceImpl implements PayService {
         SFilmIndexPage<PayDataRef> page = new SFilmIndexPage<>();
         page.setStatus(0);
         page.setData(payDataRef);
-        page.setImgPre("http://www.duolaima.com");
+        page.setImgPre("http://localhost/");
         return page;
     }
 
     @Override
-    public int queryOrderStatusBySandBox(int orderId) {
+    public int queryOrderStatusBySandBox(String orderId) {
         Main main = new Main();
         int status = main.test_trade_query(orderId);
         return status;

@@ -4,7 +4,7 @@ import com.stylefeng.guns.rest.film.vo.SFilmIndexPage;
 import com.stylefeng.guns.rest.pay.model.QROrderRef;
 
 public interface SOrderService {
-    SFilmIndexPage orderGetPayResult(int orderId);
+    SFilmIndexPage orderGetPayResult(String orderId);
 
     QROrderRef queryQROrderRef(String s);
 }

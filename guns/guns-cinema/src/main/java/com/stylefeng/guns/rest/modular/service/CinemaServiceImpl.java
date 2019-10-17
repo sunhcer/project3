@@ -200,7 +200,11 @@ public class CinemaServiceImpl implements CinemaService {
 
     @Override
     public Film getFilmInfoByFieldId(Integer fieldId) {
-        MtimeHallFilmInfoT mtimeHallFilmInfoT = mtimeHallFilmInfoTMapper.selectById(fieldId);
+
+        MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);
+        Integer filmId = mtimeFieldT.getFilmId();
+
+        MtimeHallFilmInfoT mtimeHallFilmInfoT = mtimeHallFilmInfoTMapper.selectByFilmId(filmId);
         Film film = Film.builder()
                 .actors(null)
                 .filmCats(mtimeHallFilmInfoT.getFilmCats())
