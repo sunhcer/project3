@@ -8,7 +8,7 @@ public class ConditionVo implements Serializable {
     private static final long serialVersionUID = -8931734548370592139L;
     private List<AreaVo> areaList;
     private List<BrandVo> brandList;
-    private List<HallTypeVo> hallTypeList;
+    private List<HallTypeVo> halltypeList;
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -30,11 +30,11 @@ public class ConditionVo implements Serializable {
         this.brandList = brandList;
     }
 
-    public List<HallTypeVo> getHallTypeList() {
-        return hallTypeList;
+    public List<HallTypeVo> getHalltypeList() {
+        return halltypeList;
     }
 
-    public void setHallTypeList(List<HallTypeVo> hallTypeList) {
-        this.hallTypeList = hallTypeList;
+    public void setHalltypeList(List<HallTypeVo> halltypeList) {
+        this.halltypeList = halltypeList;
     }
 }

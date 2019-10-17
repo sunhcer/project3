@@ -24,14 +24,20 @@ public class CinemaController {
 
     @RequestMapping("cinema/getCondition")
     public BaseRespVo queryBrand(Integer brandId,Integer hallType,Integer areaId){
+
         List<BrandVo> brandVos = cinemaService.queryBrands(brandId);
         List<HallTypeVo> hallTypeVos = cinemaService.queryHallTypes(hallType);
         List<AreaVo> areaVos1 = cinemaService.queryAreas(areaId);
 
+        brandVos.get(29).setActive(true);
+        areaVos1.get(16).setActive(true);
+        hallTypeVos.get(13).setActive(true);
+
         ConditionVo conditionVo = new ConditionVo();
         conditionVo.setAreaList(areaVos1);
         conditionVo.setBrandList(brandVos);
-        conditionVo.setHallTypeList(hallTypeVos);
+        conditionVo.setHalltypeList(hallTypeVos);
+
 
         BaseRespVo success = BaseRespVo.success(conditionVo);
         success.setImgPre(null);
@@ -42,10 +48,11 @@ public class CinemaController {
     @RequestMapping("cinema/getCinemas")
     public BaseRespVo getCinemas( CinemaQueryVo cinemaQueryVo){
         List<CinemaVo> cinemas = cinemaService.getCinemas(cinemaQueryVo);
-
         BaseRespVo success = BaseRespVo.success(cinemas);
         success.setImgPre(imgPre);
+
         success.setTotalPage(cinemaQueryVo.getTotalPage());
+
         success.setNowPage(cinemaQueryVo.getNowPage());
         return success;
     }
