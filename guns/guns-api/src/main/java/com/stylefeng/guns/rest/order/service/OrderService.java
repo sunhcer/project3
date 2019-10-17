@@ -11,6 +11,8 @@ public interface OrderService {
     public BaseVo buyTickets(String userId, BuyTicketsVO buyTicketsVO);
 
     List<OrderInfo> getMyOrderInfo(MyOrderPage myOrderPage, String userId);
+
+    public void updateOrderInfo();
 }
 
 

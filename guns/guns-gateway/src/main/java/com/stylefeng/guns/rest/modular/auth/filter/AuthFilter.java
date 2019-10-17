@@ -48,21 +48,36 @@ public class AuthFilter extends OncePerRequestFilter {
             return;
         }
         String path = request.getServletPath();
-        String ignorelUrlString = jwtProperties.getIgnorelUrl();
-        String[] ignoreUrl = ignorelUrlString.split(",");
+        String unIgnorelUrlString = jwtProperties.getUnIgnorelUrl();
+        String[] unIgnoreUrl = unIgnorelUrlString.split(",");
 
-        if (ignoreUrl != null && ignoreUrl.length > 0){
-            List ignoreList = Arrays.asList(ignoreUrl);
-            if (ignoreList.contains(path)){
-                chain.doFilter(request, response);
-                return;
-            }
+
+//        if (ignoreUrl != null && ignoreUrl.length > 0){
+//            List ignoreList = Arrays.asList(ignoreUrl);
+//            if (ignoreList.contains(path)){
+//                chain.doFilter(request, response);
+//                return;
+//            }
+//        }
+
+        if (unIgnoreUrl == null || unIgnoreUrl.length == 0) {
+            //不忽略的为空    直接放行
+            chain.doFilter(request, response);
+            return;
         }
+
+        List unIgnoreList = Arrays.asList(unIgnoreUrl);
+        if (!unIgnoreList.contains(path)){
+            //如果不包含     直接放行
+            chain.doFilter(request, response);
+            return;
+        }
+
 
         final String requestHeader = request.getHeader(jwtProperties.getHeader());
         String authToken = null;
 
-        if(requestHeader == null ) {
+        if (requestHeader == null) {
             RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_NOTFOUND.getCode(), BizExceptionEnum.TOKEN_NOTFOUND.getMessage()));
             return;
         }
@@ -87,7 +102,7 @@ public class AuthFilter extends OncePerRequestFilter {
             RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
             return;
         }
-        jedis.expire(authToken,expireSeconds);
+        jedis.expire(authToken, expireSeconds);
         chain.doFilter(request, response);
     }
 }

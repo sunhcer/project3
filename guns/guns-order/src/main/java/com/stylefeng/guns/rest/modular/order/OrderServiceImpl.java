@@ -49,6 +49,8 @@ public class OrderServiceImpl implements OrderService {
         //首先判断信息有没有错误
         BaseVo baseVo = new BaseVo();
 
+        updateOrderInfo();
+
         //查询场次信息
         Integer fieldId = buyTicketsVO.getFieldId();
         MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);
@@ -262,7 +264,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 调用查询之前 将订单的状态更新一下
      */
-    private void updateOrderInfo() {
+    public void updateOrderInfo() {
         EntityWrapper<MoocOrderT> wrapper = new EntityWrapper<>();
         wrapper.eq("order_status", 0);      //如果是未付款状态  则在下单15分钟后取消该订单
         wrapper.le("order_time", new Date(System.currentTimeMillis() - 1000*60*15) );

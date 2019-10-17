@@ -42,11 +42,11 @@ public class FilmController {
                 responseVO = filmService.searchFilmsByName(info);
             }
         }catch (Exception e){
-            throw  new GunsException(BizExceptionEnum.SYSTEM_EXCEPTION);
+            throw new GunsException(BizExceptionEnum.SYSTEM_EXCEPTION);
         }
 
         if(responseVO.getData() == null){
-            throw  new GunsException(BizExceptionEnum.FILM_EMPTY_EXCEPTION);
+            throw new GunsException(BizExceptionEnum.FILM_EMPTY_EXCEPTION);
         }
 
         return responseVO;

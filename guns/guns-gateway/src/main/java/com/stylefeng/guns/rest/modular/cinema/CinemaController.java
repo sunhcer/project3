@@ -3,8 +3,7 @@ package com.stylefeng.guns.rest.modular.cinema;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.cinema.model.*;
 import com.stylefeng.guns.rest.cinema.service.CinemaService;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import com.stylefeng.guns.rest.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +19,8 @@ public class CinemaController {
 
     @Reference(interfaceClass = CinemaService.class,check = false)
     CinemaService cinemaService;
+    @Reference(interfaceClass = OrderService.class, check = false)
+    OrderService orderService;
 
     @RequestMapping("cinema/getCondition")
     public BaseRespVo queryBrand(Integer brandId,Integer hallType,Integer areaId){
@@ -77,6 +78,9 @@ public class CinemaController {
 
     @RequestMapping("/cinema/getFieldInfo")
     public BaseResultVO getFieldInfo(Integer cinemaId, Integer fieldId) {
+
+        orderService.updateOrderInfo();
+
         HallInfoVO hallInfoVO = HallInfoVO.builder()
                 .cinemaInfo(cinemaService.getCinemaInfoByCinemaId(cinemaId))
                 .hallInfo(cinemaService.getHallInfoByFieldId(fieldId))

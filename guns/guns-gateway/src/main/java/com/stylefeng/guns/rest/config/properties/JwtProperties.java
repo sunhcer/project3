@@ -25,14 +25,14 @@ public class JwtProperties {
 
     private String md5Key = "randomKey";
 
-    private String ignorelUrl;
+    private String unIgnorelUrl;
 
-    public String getIgnorelUrl() {
-        return ignorelUrl;
+    public String getUnIgnorelUrl() {
+        return unIgnorelUrl;
     }
 
-    public void setIgnorelUrl(String ignorelUrl) {
-        this.ignorelUrl = ignorelUrl;
+    public void setUnIgnorelUrl(String unIgnorelUrl) {
+        this.unIgnorelUrl = unIgnorelUrl;
     }
 
     public static String getJwtPrefix() {

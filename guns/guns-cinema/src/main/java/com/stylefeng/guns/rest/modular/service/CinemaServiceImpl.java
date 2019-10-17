@@ -224,6 +224,7 @@ public class CinemaServiceImpl implements CinemaService {
     private String getSoldSeatsByFieldId(Integer fieldId) {
         EntityWrapper<MoocOrderT> wrapper = new EntityWrapper<>();
         wrapper.eq("field_id",fieldId);
+        wrapper.in("order_status", new Integer[]{0,1});
         List<MoocOrderT> moocOrderTS = moocOrderTMapper.selectList(wrapper);
         StringBuilder soldSeats = new StringBuilder();
         for (MoocOrderT moocOrderT : moocOrderTS) {

@@ -8,7 +8,8 @@ jwt:
   expiration: 604800      #7天 单位:秒
   auth-path: auth         #认证请求的路径
   md5-key: randomKey      #md5加密混淆key
-  ignorel-url: /user/register,/user/logout,/cinema/getFieldInfo,/film/getIndex,/film/getConditionList,/film/getFilms,/cinema/getCondition,/cinema/getCinemas,/cinema/getFields
+#  unIgnorel-url: /user/register,/user/logout,/cinema/getFieldInfo,/film/getIndex,/film/getConditionList,/film/getFilms,/cinema/getCondition,/cinema/getCinemas,/cinema/getFields
+  unIgnorel-url: /order/getPayInfo,/order/getPayResult,/order/buyTickets
 
 server:
   port: 8080 #项目端口
@@ -48,5 +49,5 @@ logging:
   level.com.stylefeng: debug
   path: logs/
   file: guns-gateway.log
-myexpire: 60    #token过期时间
+myexpire: 6000    #token过期时间
 film-seats:  123214.json,4d.json,4dx.json,12314.json
