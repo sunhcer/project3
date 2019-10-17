@@ -2,6 +2,7 @@ package com.stylefeng.guns.rest.modular.pay;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.rest.film.vo.SFilmIndexPage;
+import com.stylefeng.guns.rest.pay.model.QROrderRef;
 import com.stylefeng.guns.rest.pay.service.PayService;
 import com.stylefeng.guns.rest.pay.service.SOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,9 @@ public class PayController {
     @RequestMapping("order/getPayInfo")
     //测试参数接收post
     public SFilmIndexPage orderPayInfo(int orderId){
-        SFilmIndexPage qrcode=payService.orderPayQRcode(orderId);
+        //查找相应的订单信息
+        QROrderRef orderRef=sOrderService.queryQROrderRef(orderId+"");
+        SFilmIndexPage qrcode=payService.orderPayQRcode(orderRef);
         return qrcode;
     }
 
