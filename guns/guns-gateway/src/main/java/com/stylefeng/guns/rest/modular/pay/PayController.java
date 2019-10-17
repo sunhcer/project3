@@ -21,9 +21,9 @@ public class PayController {
     PayService payService;
     @RequestMapping("order/getPayInfo")
     //测试参数接收post
-    public SFilmIndexPage orderPayInfo(int orderId){
+    public SFilmIndexPage orderPayInfo(String orderId){
         //查找相应的订单信息
-        QROrderRef orderRef=sOrderService.queryQROrderRef(orderId+"");
+        QROrderRef orderRef=sOrderService.queryQROrderRef(orderId);
         SFilmIndexPage qrcode=payService.orderPayQRcode(orderRef);
         return qrcode;
     }
