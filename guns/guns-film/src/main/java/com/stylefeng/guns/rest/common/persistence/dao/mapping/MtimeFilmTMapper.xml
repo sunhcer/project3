@@ -54,26 +54,31 @@
     </select>
 
     <select id="queryFilmListByReceiveVo" resultMap="queryFilmListByBoxNumMap">
-        select f.UUID,f.film_name,f.film_type,f.img_address,
+   select f.UUID,f.film_name,f.film_type,f.img_address,
     f.film_score,f.film_preSaleNum,f.film_box_office,
    f.film_cats,f.film_area,f.film_time,
     fi.film_length from mtime_film_t f
     left join mtime_film_info_t fi on f.UUID=fi.film_id
    <where>
-   <if test="!catId.equals('#99#')">
+   <if test="!catId.equals('#99#') and !catId.equals('#0#')">
     f.film_cats like #{catId}
    </if>
-    <if test="receiveVo.sourceId != 99">
+    <if test="receiveVo.sourceId != 99 and receiveVo.sourceId != 0">
         and f.film_source=#{receiveVo.sourceId}
     </if>
-    <if test="receiveVo.yearId != 99">
+    <if test="receiveVo.yearId != 99 and receiveVo.yearId != 0">
         and f.film_date=#{receiveVo.yearId}
     </if>
     <if test="receiveVo.showType!=0">
         and f.film_status=#{receiveVo.showType}
     </if>
    </where>
-   limit #{receiveVo.pageSize} offset #{receiveVo.offset}
+   <if test="receiveVo.pageSize!=0">
+   limit #{receiveVo.pageSize}
+   </if>
+   <if test="receiveVo.offset!=0">
+   offset #{receiveVo.offset}
+   </if>
     </select>
 
 
