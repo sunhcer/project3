@@ -7,5 +7,5 @@ public interface PayService {
 
     SFilmIndexPage orderPayQRcode(QROrderRef orderRe);
 
-    int queryOrderStatusBySandBox(int orderId);
+    int queryOrderStatusBySandBox(String orderId);
 }

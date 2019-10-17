@@ -15,7 +15,7 @@ public class SOrderServiceImpl implements SOrderService {
     @Autowired
     MoocOrderTMapper sOrderMapper;
     @Override
-    public SFilmIndexPage orderGetPayResult(int orderId) {
+    public SFilmIndexPage orderGetPayResult(String orderId) {
         sOrderMapper.updateOrderStatusBySandBox(orderId+"");
         SOrderBoxRef orderBoxRef = new SOrderBoxRef(orderId + "", 1, "支付成功");
         SFilmIndexPage<SOrderBoxRef> sOrderPage = new SFilmIndexPage<>();
