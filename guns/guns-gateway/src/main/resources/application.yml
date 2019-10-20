@@ -10,7 +10,7 @@ jwt:
   md5-key: randomKey      #md5加密混淆key
 
 #  unIgnorel-url: /user/register,/user/logout,/cinema/getFieldInfo,/film/getIndex,/film/getConditionList,/film/getFilms,/cinema/getCondition,/cinema/getCinemas,/cinema/getFields
-  unIgnorel-url: /order/getPayInfo,/order/getPayResult,/order/buyTickets
+  unIgnorel-url: /user/getUserInfo,/user/updateUserInfo,/order/getOrderInfo,/order/buyTickets,/order/getPayInfo,/order/getPayResult,/promo/generateToken,/promo/createOrder
 
 
 server:

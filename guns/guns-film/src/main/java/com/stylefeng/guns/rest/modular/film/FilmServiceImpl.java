@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -118,10 +119,10 @@ public class FilmServiceImpl implements FilmService {
 
         //获取地区
         String areaName = mtimeSourceDictTMapper.selectById(mtimeFilmT.getFilmArea()).getShowName();
-        String info2 = areaName + " / " + mtimeFilmInfoT.getFilmLength();
+        String info2 = areaName + " / " + mtimeFilmInfoT.getFilmLength() + "分钟";
 
         //info3的拼接
-        String info3 = mtimeFilmT.getFilmTime() + areaName + "上映";
+        String info3 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(mtimeFilmT.getFilmTime()) + areaName + "上映";
 
 
 
@@ -167,6 +168,7 @@ public class FilmServiceImpl implements FilmService {
         SearchFilmByIdBean searchFilmByIdBean = SearchFilmByIdBean.builder()
                 .filmId(mtimeFilmT.getUuid().toString())
                 .filmName(mtimeFilmT.getFilmName())
+                .filmEnName(mtimeFilmInfoT.getFilmEnName())
                 .imgAddress(mtimeFilmT.getImgAddress())
                 .score(mtimeFilmT.getFilmScore())
                 .scoreNum(mtimeFilmInfoT.getFilmScoreNum().toString())
@@ -216,7 +218,7 @@ public class FilmServiceImpl implements FilmService {
         List<MtimeCatDictT> dictTList = mtimeCatDictTMapper.selectBatchIds(catList);
 
         for (int i = 0; i < dictTList.size(); i++) {
-            sb.append(dictTList.get(i));
+            sb.append(dictTList.get(i).getShowName());
             if (i != dictTList.size() - 1) {
                 sb.append(",");
             }
