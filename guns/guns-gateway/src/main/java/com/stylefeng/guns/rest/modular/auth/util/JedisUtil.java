@@ -1,8 +1,8 @@
 package com.stylefeng.guns.rest.modular.auth.util;
 
 import com.stylefeng.guns.rest.config.properties.JwtProperties;
-import com.stylefeng.guns.rest.user.model.BaseVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 
@@ -19,8 +19,10 @@ public class JedisUtil {
     @Autowired
     JwtProperties jwtProperties;
 
+//    @Autowired
+//    Jedis jedis;
     @Autowired
-    Jedis jedis;
+    private StringRedisTemplate redisTemplate;
 
     public String getUserId(HttpServletRequest request) {
         String requestHeader = request.getHeader(jwtProperties.getHeader());
@@ -29,7 +31,8 @@ public class JedisUtil {
             return null;
         }
         authToken = requestHeader.substring(7);
-        String id = jedis.get(authToken);
+//        String id = jedis.get(authToken);
+        String id = redisTemplate.opsForValue().get(authToken);
         return id;
     }
 }

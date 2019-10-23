@@ -10,9 +10,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.filter.OncePerRequestFilter;
-import redis.clients.jedis.Jedis;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 对客户端请求的jwt token验证过滤器
@@ -36,8 +36,10 @@ public class AuthFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtProperties jwtProperties;
+//    @Autowired
+//    Jedis jedis;
     @Autowired
-    Jedis jedis;
+    private StringRedisTemplate redisTemplate;
     @Value("${myexpire}")
     int expireSeconds;
 
@@ -87,7 +89,8 @@ public class AuthFilter extends OncePerRequestFilter {
             //验证token是否过期,包含了验证jwt是否正确
             try {
 //                boolean flag = jwtTokenUtil.isTokenExpired(authToken);
-                String flag = jedis.get(authToken);
+//                String flag = jedis.get(authToken);
+                String flag = redisTemplate.opsForValue().get(authToken);
                 if (flag == null) {
                     RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     return;
@@ -102,7 +105,8 @@ public class AuthFilter extends OncePerRequestFilter {
             RenderUtil.renderJson(response, new ErrorTip(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
             return;
         }
-        jedis.expire(authToken, expireSeconds);
+//        jedis.expire(authToken, expireSeconds);
+        redisTemplate.expire(authToken, expireSeconds, TimeUnit.SECONDS);
         chain.doFilter(request, response);
     }
 }

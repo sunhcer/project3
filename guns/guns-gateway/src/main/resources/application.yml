@@ -1,5 +1,5 @@
 rest:
-  auth-open: false #jwt鉴权机制是否开启(true或者false)
+  auth-open: true #jwt鉴权机制是否开启(true或者false)
   sign-open: false #签名机制是否开启(true或false)
 
 jwt:
@@ -38,6 +38,18 @@ spring:
       filters: log4j,wall,mergeStat
   application:
     name: guns-gateway
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+    jedis:
+      pool:
+        max-active: 200
+        max-idle: 20
+        min-idle: 0
+        max-wait: -1
+    timeout: 10000
+    database: 0
   dubbo:
     registry: zookeeper://localhost:2181
   resources:
@@ -53,3 +65,5 @@ logging:
   file: guns-gateway.log
 myexpire: 6000    #token过期时间
 film-seats:  imax.json,cgs.json,dubiquanjingsheng.json,dolby-cinema.json,reald-6fl.json,luxe.json,4dx.json,dts-x.json,kids.json,4k.json,4d.json,jumu.json
+
+

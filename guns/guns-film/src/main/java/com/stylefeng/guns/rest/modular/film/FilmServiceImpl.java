@@ -6,6 +6,7 @@ import com.stylefeng.guns.rest.common.persistence.dao.*;
 import com.stylefeng.guns.rest.common.persistence.model.*;
 import com.stylefeng.guns.rest.film.model.*;
 import com.stylefeng.guns.rest.film.service.FilmService;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -241,7 +242,12 @@ public class FilmServiceImpl implements FilmService {
 
 
         ArrayList<FilmDetail> filmDetailArrayList = new ArrayList<>();
-        List<MtimeFilmT> mtimeFilmTS = mtimeFilmTMapper.selectList(wrapper);
+
+        RowBounds rowBounds = new RowBounds(0,8);
+        List<MtimeFilmT> mtimeFilmTS = mtimeFilmTMapper.selectPage(rowBounds, wrapper);
+
+        Integer count = mtimeFilmTMapper.selectCount(wrapper);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 
         for (MtimeFilmT mtimeFilmT : mtimeFilmTS) {
@@ -254,7 +260,7 @@ public class FilmServiceImpl implements FilmService {
             String fileName = mtimeFilmT.getFilmName();
             String filmScore = mtimeFilmT.getFilmScore();
             String imgAddress = mtimeFilmT.getImgAddress();
-            Date showTime = mtimeFilmT.getFilmTime();
+            Object showTime = sdf.format(mtimeFilmT.getFilmTime());
             Integer filmLength = 0;
             if (mtimeFilmInfoT != null) {
                 filmLength = mtimeFilmInfoT.getFilmLength();
@@ -275,7 +281,7 @@ public class FilmServiceImpl implements FilmService {
         FilmsDetail filmsDetail = new FilmsDetail();
         filmsDetail.setFilmInfo(filmDetailArrayList);
 
-        filmsDetail.setFilmNum(mtimeFilmTS.size());
+        filmsDetail.setFilmNum(count);
         filmsDetail.setNowPage(0);
         filmsDetail.setTotalPage(0);
         return filmsDetail;

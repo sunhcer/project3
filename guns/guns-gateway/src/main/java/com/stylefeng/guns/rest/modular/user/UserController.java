@@ -10,9 +10,9 @@ import com.stylefeng.guns.rest.user.model.UserRegister;
 import com.stylefeng.guns.rest.user.service.MtimeUserTService;
 import com.stylefeng.guns.rest.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +37,10 @@ public class UserController {
     @Autowired
     JwtProperties jwtProperties;
 
+    //    @Autowired
+//    Jedis jedis;
     @Autowired
-    Jedis jedis;
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     JedisUtil jedisUtil;
@@ -115,13 +117,15 @@ public class UserController {
         BaseVo baseVo = new BaseVo();
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
-            String flag = jedis.get(authToken);
+//            String flag = jedis.get(authToken);
+            String flag = redisTemplate.opsForValue().get(authToken);
 //            if (flag == null) {
 //                baseVo.setStatus(1);
 //                baseVo.setMsg("退出失败，用户尚未登陆");
 //                return baseVo;
 //            }
-            jedis.del(authToken);
+//            jedis.del(authToken);
+            redisTemplate.delete(authToken);
         }
 //        }else{
 //            BaseVo baseVo = new BaseVo();

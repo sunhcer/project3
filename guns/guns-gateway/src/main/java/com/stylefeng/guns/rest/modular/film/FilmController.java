@@ -1,16 +1,24 @@
 package com.stylefeng.guns.rest.modular.film;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.google.common.util.concurrent.RateLimiter;
 import com.stylefeng.guns.rest.film.model.BaseFilmResponseVO;
 import com.stylefeng.guns.rest.film.service.FilmService;
 import com.stylefeng.guns.rest.film.service.SFilmService;
 import com.stylefeng.guns.rest.film.vo.SFilmIndexPage;
 import com.stylefeng.guns.rest.film.vo.SSelctFilmReceiveVo;
 import com.stylefeng.guns.rest.film.vo.SSelectFilmVo;
+import com.stylefeng.guns.rest.modular.cache.CacheService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class FilmController {
@@ -18,12 +26,48 @@ public class FilmController {
     SFilmService sfilmService;
     @Reference(interfaceClass = FilmService.class,check=false)
     FilmService filmService;
+    @Autowired
+    CacheService cacheService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    RateLimiter rateLimiter;
+
+    @PostConstruct
+    public void init(){
+        rateLimiter = RateLimiter.create(30);
+    }
 
     ///film/getIndex
     @GetMapping("/film/getIndex")
     public BaseFilmResponseVO getFilmIndex() {
+        Object filmIndexFromCache = cacheService.get("filmIndex");
+        Object filmIndexFromRedis = redisTemplate.opsForValue().get("filmIndex");
+        if(filmIndexFromCache != null || filmIndexFromRedis != null){
+            if (filmIndexFromCache != null) {
+                BaseFilmResponseVO fromCache = (BaseFilmResponseVO) filmIndexFromCache;
+                redisTemplate.opsForValue().set("filmIndex", fromCache);
+                redisTemplate.expire("filmIndex", 5, TimeUnit.MINUTES);
+                return fromCache;
+            }else{
+                BaseFilmResponseVO fromRedis = (BaseFilmResponseVO) filmIndexFromRedis;
+                cacheService.set("filmIndex", fromRedis);
+                return fromRedis;
+            }
+        }
+
+        //两层缓存都失效了  获取桶  如果桶不够 拒绝掉它(请求)
+        double acquire = rateLimiter.acquire();
+        if (acquire < 0){
+            return BaseFilmResponseVO.fail("获取首页失败,请重试");
+        }
+
         BaseFilmResponseVO filmIndex = filmService.getFilmIndex();
         filmIndex.setStatus(0);
+        //将主页放入缓存中
+        cacheService.set("filmIndex", filmIndex);
+        redisTemplate.opsForValue().set("filmIndex", filmIndex);
+        redisTemplate.expire("filmIndex", 5, TimeUnit.MINUTES);
+
         return filmIndex;
     }
 

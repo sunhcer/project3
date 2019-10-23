@@ -19,4 +19,12 @@ public class BaseFilmResponseVO<T> implements Serializable {
     private String totalPage;
     private Integer code;
     private T data;
+
+    public static BaseFilmResponseVO fail(String message){
+        BaseFilmResponseVO<Object> responseVO = new BaseFilmResponseVO<>();
+
+        responseVO.setCode(999);
+        responseVO.setMsg(message);
+        return responseVO;
+    }
 }

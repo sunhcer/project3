@@ -4,6 +4,7 @@ import com.alibaba.dubbo.config.annotation.Reference;
 import com.stylefeng.guns.core.exception.GunsException;
 import com.stylefeng.guns.rest.common.exception.BizExceptionEnum;
 import com.stylefeng.guns.rest.modular.auth.util.JedisUtil;
+import com.stylefeng.guns.rest.modular.cache.CacheService;
 import com.stylefeng.guns.rest.order.model.BuyTicketsVO;
 import com.stylefeng.guns.rest.order.service.OrderService;
 import com.stylefeng.guns.rest.user.model.BaseVo;
@@ -35,8 +36,8 @@ public class OrderController {
     @Autowired
     JwtProperties jwtProperties;
 
-    @Autowired
-    Jedis jedis;
+//    @Autowired
+//    Jedis jedis;
 
     ///order/buyTickets
     @PostMapping("/order/buyTickets")
@@ -66,7 +67,6 @@ public class OrderController {
     @RequestMapping("/order/getOrderInfo")
     public BaseOrderResponseVO getMyOrderInfo(MyOrderPage myOrderPage, HttpServletRequest request){
         String userId = jedisUtil.getUserId(request);   //拿到该userId
-//        String userId=1+"";
         List<OrderInfo> myOrderInfo = orderService.getMyOrderInfo(myOrderPage, userId);
         BaseOrderResponseVO VO = new BaseOrderResponseVO();
         if(myOrderInfo==null){

@@ -10,9 +10,11 @@ import com.stylefeng.guns.rest.modular.auth.util.JwtTokenUtil;
 import com.stylefeng.guns.rest.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import redis.clients.jedis.Jedis;
+
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -27,11 +29,13 @@ public class AuthController {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Reference(interfaceClass = UserService.class,check = false)
+    @Reference(interfaceClass = UserService.class, check = false)
     UserService userService;
 
+    //    @Autowired
+//    Jedis jedis;
     @Autowired
-    Jedis jedis;
+    private StringRedisTemplate redisTemplate;
     @Value("${myexpire}")
     int expireSeconds;
 
@@ -49,10 +53,12 @@ public class AuthController {
 
             //将其登录信息放入redis
             //用户id
-            jedis.set(token, userId+"");
-            jedis.expire(token, expireSeconds);
+//            jedis.set(token, userId + "");
+//            jedis.expire(token, expireSeconds);
+            redisTemplate.opsForValue().set(token, userId + "");
+            redisTemplate.expire(token, expireSeconds, TimeUnit.SECONDS);
 //            return ResponseEntity.ok(new AuthResponse(token, randomKey));
-            return new BaseAuthResponseVO(0,new AuthResponse(token, randomKey));
+            return new BaseAuthResponseVO(0, new AuthResponse(token, randomKey));
         } else {
             throw new GunsException(BizExceptionEnum.AUTH_REQUEST_ERROR);
         }

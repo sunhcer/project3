@@ -29,6 +29,6 @@ public class FilmDetail implements Serializable {
     Integer filmType;
     String imgAddress;
     String score;
-    Date showTime;
+    Object showTime;
 
 }

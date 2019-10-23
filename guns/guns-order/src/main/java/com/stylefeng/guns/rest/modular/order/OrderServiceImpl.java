@@ -19,8 +19,8 @@ import com.stylefeng.guns.rest.order.model.*;
 import com.stylefeng.guns.rest.order.service.OrderService;
 import com.stylefeng.guns.rest.user.model.BaseVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,8 +33,11 @@ import java.util.List;
 @Component
 public class OrderServiceImpl implements OrderService {
 
+    //    @Autowired
+//    Jedis jedis;
     @Autowired
-    Jedis jedis;
+    private StringRedisTemplate redisTemplate;
+
     @Reference(interfaceClass = CinemaService.class, check = false)
     CinemaService cinemaService;
     @Reference(interfaceClass = FilmService.class, check = false)
@@ -54,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
         //查询场次信息
         Integer fieldId = buyTicketsVO.getFieldId();
         MtimeFieldT mtimeFieldT = mtimeFieldTMapper.selectById(fieldId);
-        if (mtimeFieldT == null){
+        if (mtimeFieldT == null) {
             //查询到的场次为null  代表本次查询失败  直接返回
             baseVo.setStatus(1);
             baseVo.setMsg("查询场次失败 请联系管理员处理");
@@ -67,7 +70,7 @@ public class OrderServiceImpl implements OrderService {
         //电影信息
         FilmDetail filmDetail = filmService.selectFilmById(mtimeFieldT.getFilmId());
 
-        if (filmDetail == null || cinemaInfo == null){
+        if (filmDetail == null || cinemaInfo == null) {
             baseVo.setStatus(1);
             baseVo.setMsg("查询电影或者影院信息错误");
             return baseVo;
@@ -77,14 +80,15 @@ public class OrderServiceImpl implements OrderService {
         String soldSeats = buyTicketsVO.getSoldSeats();
         //下订单的座位List
         List<String> soldSeatList = Arrays.asList(soldSeats.split(","));
-        if (soldSeatList == null || soldSeatList.size() == 0){
+        if (soldSeatList == null || soldSeatList.size() == 0) {
             baseVo.setStatus(1);
             baseVo.setMsg("座位信息不能为空");
             return baseVo;
         }
 
         HallInfo hallInfo = cinemaService.getHallInfoByFieldId(mtimeFieldT.getUuid());
-        String json = jedis.get(hallInfo.getSeatFile());
+//        String json = jedis.get(hallInfo.getSeatFile());
+        String json = redisTemplate.opsForValue().get(hallInfo.getSeatFile());
 
         ObjectMapper objectMapper = new ObjectMapper();
         SeatsInfo seatsInfo = null;
@@ -101,7 +105,7 @@ public class OrderServiceImpl implements OrderService {
         //所有座位信息
         List<String> stringList = Arrays.asList(seatsInfo.getIds().toString().split(","));
         boolean flag = oneListContainsAnother(stringList, soldSeatList);
-        if (flag == false){
+        if (flag == false) {
             //座位信息有误 座位不存在
             baseVo.setStatus(1);
             baseVo.setMsg("座位不存在");
@@ -114,7 +118,7 @@ public class OrderServiceImpl implements OrderService {
         //查询数据库 查看是否已经出售过
         EntityWrapper<MoocOrderT> wrapper = new EntityWrapper<>();
         wrapper.eq("field_id", fieldId);
-        wrapper.in("order_status",new Integer[]{0,1});
+        wrapper.in("order_status", new Integer[]{0, 1});
         List<MoocOrderT> moocOrderTList = moocOrderTMapper.selectList(wrapper);
 
         for (MoocOrderT moocOrderT : moocOrderTList) {
@@ -122,7 +126,7 @@ public class OrderServiceImpl implements OrderService {
             String seatsIds = moocOrderT.getSeatsIds();
             List<String> seatList = Arrays.asList(seatsIds.split(","));
             //准备买的几个座位
-            if (!oneListHasAnother(seatList, soldSeatList)){
+            if (!oneListHasAnother(seatList, soldSeatList)) {
                 //如果校验不通过  代表售票失败
                 baseVo.setStatus(1);
                 baseVo.setMsg("座位已被售出");
@@ -145,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
         StringBuilder sb = new StringBuilder();
         for (List<Seat> list : single) {
             for (Seat seat : list) {
-                if (soldSeatList.contains(seat.getSeatId())){
+                if (soldSeatList.contains(seat.getSeatId())) {
                     //如果是这个座位
                     sb.append(seat.getRow() + "排" + seat.getColumn() + "列 ");
                 }
@@ -190,13 +194,14 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 查看一个list是否包含另一个list
+     *
      * @param one
      * @param another
      * @return
      */
-    private boolean oneListContainsAnother(List<String> one, List<String> another){
+    private boolean oneListContainsAnother(List<String> one, List<String> another) {
         for (String s : another) {
-            if (!one.contains(s)){
+            if (!one.contains(s)) {
                 return false;
             }
         }
@@ -205,14 +210,15 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 查看一个list是否包含一个
+     *
      * @param one
      * @param another
      * @return
      */
-    private boolean oneListHasAnother(List<String> one, List<String> another){
+    private boolean oneListHasAnother(List<String> one, List<String> another) {
         //one是出售过的  只要出售的包含another 就代表售出失败
         for (String buy : another) {
-            if (one.contains(buy)){
+            if (one.contains(buy)) {
                 //如果包含的话
                 return false;
             }
@@ -220,7 +226,6 @@ public class OrderServiceImpl implements OrderService {
         //审核通过 代表没有卖出去过
         return true;
     }
-
 
 
     @Override
@@ -233,25 +238,26 @@ public class OrderServiceImpl implements OrderService {
 
         EntityWrapper<MoocOrderT> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("order_user", userId);
+        entityWrapper.orderBy("order_time",false);
         List<MoocOrderT> list = moocOrderTMapper.selectPage(page, entityWrapper);
-        List<OrderInfo> list1=new ArrayList<>();
+        List<OrderInfo> list1 = new ArrayList<>();
         for (MoocOrderT order : list) {  //拿到每个小定单
             OrderInfo orderInfo = new OrderInfo();
             String cinemaName = cinemaService.getCinemaInfoByCinemaId(order.getCinemaId()).getCinemaName();
             orderInfo.setCinemaName(cinemaName);//  1
             MtimeFieldT field = mtimeFieldTMapper.selectById(order.getFieldId());
-            orderInfo.setFieldTime("19年10月16日"+field.getBeginTime());//  2
+            orderInfo.setFieldTime("19年10月16日" + field.getBeginTime());//  2
             Film film = cinemaService.getFilmInfoByFieldId(order.getFieldId());
             orderInfo.setFilmName(film.getFilmName());//    3
             orderInfo.setOrderId(order.getUuid());//     4
             orderInfo.setOrderPrice(order.getOrderPrice().toString());//     5
             //0-待支付,1-已支付,2-已关闭
             Integer status = order.getOrderStatus();
-            if(status==0){
+            if (status == 0) {
                 orderInfo.setOrderStatus("待支付");
-            }else if(status==1){
+            } else if (status == 1) {
                 orderInfo.setOrderStatus("已支付");
-            }else {
+            } else {
                 orderInfo.setOrderStatus("已关闭");//     6
             }
 //            orderInfo.setOrderTimestamp("1571206839");//     7
@@ -268,7 +274,7 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrderInfo() {
         EntityWrapper<MoocOrderT> wrapper = new EntityWrapper<>();
         wrapper.eq("order_status", 0);      //如果是未付款状态  则在下单15分钟后取消该订单
-        wrapper.le("order_time", new Date(System.currentTimeMillis() - 1000*60*15) );
+        wrapper.le("order_time", new Date(System.currentTimeMillis() - 1000 * 60 * 15));
 
         MoocOrderT orderT = new MoocOrderT();
         orderT.setOrderStatus(2);

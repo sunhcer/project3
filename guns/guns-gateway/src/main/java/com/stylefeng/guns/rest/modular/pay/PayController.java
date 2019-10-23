@@ -20,8 +20,8 @@ public class PayController {
 
     @Reference(interfaceClass = SOrderService.class,check = false)
     SOrderService sOrderService;
-    @Autowired
-    Jedis jedis;
+//    @Autowired
+////    Jedis jedis;
     @Reference(interfaceClass = PayService.class,check = false)
     PayService payService;
     @RequestMapping("order/getPayInfo")

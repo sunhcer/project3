@@ -12,7 +12,11 @@ public enum GunsExceptionEnum implements ServiceExceptionEnum {
      * 其他
      */
     INVLIDE_DATE_STRING(400, "输入日期格式不对"),
-
+    INVLIDE_PROMO(2,"无效的秒杀活动"),
+    CACHE_ERROR(2,"缓存同步失败"),
+    STOCK_LACK(5,"库存不足"),
+    ORDER_CREATE_ERROR(5, "订单生成失败"),
+    MESSAGE_SEND_FAIL(8, "消息发送失败"),
     /**
      * 其他
      */
